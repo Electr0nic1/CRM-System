@@ -1,0 +1,22 @@
+.task {
+  display: grid;
+  flex-direction: row;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+  align-items: center;
+
+  p {
+    text-align: left;
+  }
+
+  input {
+    border-radius: 100%;
+  }
+
+  input[type='checkbox'] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    background-color: #007bff;
+    appearance: auto;
+  }
+}
