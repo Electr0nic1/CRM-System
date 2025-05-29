@@ -24,11 +24,34 @@ function Home() {
     const fetchData = async () => {
       try {
         response = await api.createTask(task)
-        setData((prevData) => ({
-          ...prevData,
-          data: [...prevData.data, response],
-        }))
+        response = await api.getTasks()
+        setData(response)
+        setTasks(
+          response.data.map((task) => (
+            <Task key={task.id} content={task} onDelete={handleDelete} />
+          )),
+        )
         setInputValue('')
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+    fetchData()
+  }
+
+  const handleDelete = (id) => {
+    let response
+    const fetchData = async () => {
+      try {
+        response = await api.deleteTask(id)
+
+        response = await api.getTasks()
+        setData(response)
+        setTasks(
+          response.data.map((task) => (
+            <Task key={task.id} content={task} onDelete={handleDelete} />
+          )),
+        )
       } catch (error) {
         console.error('Error fetching data:', error)
       }
@@ -40,9 +63,12 @@ function Home() {
     const fetchData = async () => {
       try {
         const response = await api.getTasks()
-        console.log('Data from API:', response)
         setData(response)
-        setTasks(response.data.map((task) => <Task key={task.id} content={task} />))
+        setTasks(
+          response.data.map((task) => (
+            <Task key={task.id} content={task} onDelete={handleDelete} />
+          )),
+        )
       } catch (error) {
         console.error('Error fetching data:', error)
       }
@@ -53,18 +79,20 @@ function Home() {
   const handleClick = (category) => {
     setCategory(category)
     if (category === 'all') {
-      setTasks(data.data.map((task) => <Task key={task.id} content={task} />))
+      setTasks(
+        data.data.map((task) => <Task key={task.id} content={task} onDelete={handleDelete} />),
+      )
     } else if (category === 'inWork') {
       setTasks(
         data.data
           .filter((task) => task.isDone === false)
-          .map((task) => <Task key={task.id} content={task} />),
+          .map((task) => <Task key={task.id} content={task} onDelete={handleDelete} />),
       )
     } else if (category === 'done') {
       setTasks(
         data.data
           .filter((task) => task.isDone === true)
-          .map((task) => <Task key={task.id} content={task} />),
+          .map((task) => <Task key={task.id} content={task} onDelete={handleDelete} />),
       )
     }
   }

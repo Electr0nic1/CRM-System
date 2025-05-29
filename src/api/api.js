@@ -12,7 +12,6 @@ const api = {
         throw new Error(`Response status: ${response.status}`)
       }
       const json = response.json()
-      console.log('try json',json)
       return json
     } catch (error) {
       console.error(error.message)
@@ -36,6 +35,23 @@ const api = {
       }
       const json = await response.json()
       return json
+    } catch (error) {
+      console.error(error.message)
+      throw error
+    }
+  },
+
+  async deleteTask(id) {
+    let response
+    try {
+      response = await fetch(`${url}/todos/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      })
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`)
+      }
+      return response.text()
     } catch (error) {
       console.error(error.message)
       throw error
