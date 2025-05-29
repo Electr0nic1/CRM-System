@@ -4,7 +4,7 @@ import api from '../api/api.js'
 import Task from '../components/Task.jsx'
 
 function Home() {
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState('all')
   const [inputValue, setInputValue] = useState('')
   const [data, setData] = useState({
     data: [],
@@ -20,15 +20,18 @@ function Home() {
   const [tasks, setTasks] = useState([])
 
   const handleCreate = (task) => {
-    let response
+    if (task.trim().length < 2 || task.trim().length > 64) {
+      alert('Please enter a task')
+      return
+    }
     const fetchData = async () => {
       try {
-        response = await api.createTask(task)
-        response = await api.getTasks()
+        await api.createTask(task.trim())
+        const response = await api.getTasks(category)
         setData(response)
         setTasks(
           response.data.map((task) => (
-            <Task key={task.id} content={task} onDelete={handleDelete} />
+            <Task key={task.id} content={task} onDelete={handleDelete} onUpdate={handleUpdate} />
           )),
         )
         setInputValue('')
@@ -39,17 +42,33 @@ function Home() {
     fetchData()
   }
 
-  const handleDelete = (id) => {
-    let response
+  const handleUpdate = (title, id, isDone) => {
     const fetchData = async () => {
       try {
-        response = await api.deleteTask(id)
-
-        response = await api.getTasks()
+        await api.updateTask(title, id, isDone)
+        const response = await api.getTasks(category)
         setData(response)
         setTasks(
           response.data.map((task) => (
-            <Task key={task.id} content={task} onDelete={handleDelete} />
+            <Task key={task.id} content={task} onDelete={handleDelete} onUpdate={handleUpdate} />
+          )),
+        )
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+    fetchData()
+  }
+
+  const handleDelete = (id) => {
+    const fetchData = async () => {
+      try {
+        await api.deleteTask(id)
+        const response = await api.getTasks(category)
+        setData(response)
+        setTasks(
+          response.data.map((task) => (
+            <Task key={task.id} content={task} onDelete={handleDelete} onUpdate={handleUpdate} />
           )),
         )
       } catch (error) {
@@ -62,11 +81,11 @@ function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.getTasks()
+        const response = await api.getTasks(category)
         setData(response)
         setTasks(
           response.data.map((task) => (
-            <Task key={task.id} content={task} onDelete={handleDelete} />
+            <Task key={task.id} content={task} onDelete={handleDelete} onUpdate={handleUpdate} />
           )),
         )
       } catch (error) {
@@ -74,27 +93,24 @@ function Home() {
       }
     }
     fetchData()
-  }, [])
+  }, [category])
 
-  const handleClick = (category) => {
+  const handleClick = async (category) => {
     setCategory(category)
-    if (category === 'all') {
-      setTasks(
-        data.data.map((task) => <Task key={task.id} content={task} onDelete={handleDelete} />),
-      )
-    } else if (category === 'inWork') {
-      setTasks(
-        data.data
-          .filter((task) => task.isDone === false)
-          .map((task) => <Task key={task.id} content={task} onDelete={handleDelete} />),
-      )
-    } else if (category === 'done') {
-      setTasks(
-        data.data
-          .filter((task) => task.isDone === true)
-          .map((task) => <Task key={task.id} content={task} onDelete={handleDelete} />),
-      )
+    const fetchData = async () => {
+      try {
+        const response = await api.getTasks(category)
+        setData(response)
+        setTasks(
+          response.data.map((task) => (
+            <Task key={task.id} content={task} onDelete={handleDelete} onUpdate={handleUpdate} />
+          )),
+        )
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
     }
+    fetchData()
   }
 
   return (
@@ -108,9 +124,15 @@ function Home() {
         <Button content="Add" onClick={() => handleCreate(inputValue)} />
       </div>
       <div className="tabs">
-        <a onClick={() => handleClick('all')}>All({data.info.all})</a>
-        <a onClick={() => handleClick('inWork')}>At work({data.info.inWork})</a>
-        <a onClick={() => handleClick('done')}>Done({data.info.completed})</a>
+        <a id={category === 'all' ? 'active' : ''} onClick={() => handleClick('all')}>
+          All({data.info.all})
+        </a>
+        <a id={category === 'inWork' ? 'active' : ''} onClick={() => handleClick('inWork')}>
+          At work({data.info.inWork})
+        </a>
+        <a id={category === 'completed' ? 'active' : ''} onClick={() => handleClick('completed')}>
+          Done({data.info.completed})
+        </a>
       </div>
       <div>{tasks}</div>
     </>

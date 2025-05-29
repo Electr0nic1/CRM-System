@@ -1,10 +1,10 @@
 const url = 'https://easydev.club/api/v1'
 
 const api = {
-  async getTasks() {
+  async getTasks(status = 'all') {
     let response
     try {
-      response = await fetch(`${url}/todos`, {
+      response = await fetch(`${url}/todos?filter=${status} `, {
         method: 'GET',
       })
 
@@ -52,6 +52,28 @@ const api = {
         throw new Error(`Response status: ${response.status}`)
       }
       return response.text()
+    } catch (error) {
+      console.error(error.message)
+      throw error
+    }
+  },
+
+  async updateTask(task, id, bool) {
+    let response
+    try {
+      response = await fetch(`${url}/todos/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          isDone: bool,
+          title: task,
+        }),
+      })
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`)
+      }
+      const json = await response.json()
+      return json
     } catch (error) {
       console.error(error.message)
       throw error

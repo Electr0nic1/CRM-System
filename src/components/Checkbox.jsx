@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function Checkbox({ content }) {
+function Checkbox({ content, onClick }) {
   const [checked, setChecked] = useState(content.isDone)
   return (
     <label className="checkbox">
@@ -9,6 +9,7 @@ function Checkbox({ content }) {
         id="checkbox"
         checked={checked}
         onChange={() => setChecked(!checked)}
+        onClick={onClick}
       />
       <span></span>
     </label>

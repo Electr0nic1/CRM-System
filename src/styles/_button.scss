@@ -2,7 +2,6 @@ button {
   cursor: pointer;
   background-color: #007bff;
   border: none;
-
   color: white;
   padding: 10px 40px;
   border-radius: 5px;
@@ -10,10 +9,17 @@ button {
 
 .btn-delete {
   background-color: red;
-  color: white;
 }
 
-.btn-delete, .btn-edit {
+.btn-save {
+  background-color: rgb(16, 215, 16);
+}
+
+.btn-cancel {
+  background-color: #a6a6a6;
+}
+
+.btn-delete, .btn-edit, .btn-save, .btn-cancel {
   padding: 0;
   width: 3rem;
   height: 3rem;
