@@ -5,14 +5,16 @@
   text-align: center;
 }
 
-div {
+.new-task {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
   max-width: 900px;
   min-width: 650px;
   margin: 0 auto;
   padding: 0.5rem;
-}
 
-.new-task {
   input {
     width: 100%;
     padding: 0.5rem;
@@ -29,26 +31,26 @@ div {
   }
 }
 
-.new-task {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
 .tabs {
   display: flex;
   justify-content: space-evenly;
   margin-bottom: 1rem;
   flex-direction: row;
+  margin: 0 auto;
+  padding: 0.5rem;
 
   a:hover {
     color: #007bff;
     text-decoration: underline;
   }
 
-  #active {
+  .active {
     color: #007bff;
     text-decoration: underline;
   }
+}
+
+main {
+  margin: 0 auto;
+  padding: 0.5rem;
 }

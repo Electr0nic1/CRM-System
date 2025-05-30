@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
+import Task from '../components/Task.jsx'
 import Button from '../components/Button.jsx'
 import api from '../api/api.js'
-import Task from '../components/Task.jsx'
+import { STATUS } from '../helpers/status.js'
 
 function Home() {
   const [category, setCategory] = useState('all')
@@ -27,13 +28,7 @@ function Home() {
     const fetchData = async () => {
       try {
         await api.createTask(task.trim())
-        const response = await api.getTasks(category)
-        setData(response)
-        setTasks(
-          response.data.map((task) => (
-            <Task key={task.id} content={task} onDelete={handleDelete} onUpdate={handleUpdate} />
-          )),
-        )
+        getTasks()
         setInputValue('')
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -46,13 +41,7 @@ function Home() {
     const fetchData = async () => {
       try {
         await api.updateTask(title, id, isDone)
-        const response = await api.getTasks(category)
-        setData(response)
-        setTasks(
-          response.data.map((task) => (
-            <Task key={task.id} content={task} onDelete={handleDelete} onUpdate={handleUpdate} />
-          )),
-        )
+        getTasks()
       } catch (error) {
         console.error('Error fetching data:', error)
       }
@@ -64,13 +53,7 @@ function Home() {
     const fetchData = async () => {
       try {
         await api.deleteTask(id)
-        const response = await api.getTasks(category)
-        setData(response)
-        setTasks(
-          response.data.map((task) => (
-            <Task key={task.id} content={task} onDelete={handleDelete} onUpdate={handleUpdate} />
-          )),
-        )
+        getTasks()
       } catch (error) {
         console.error('Error fetching data:', error)
       }
@@ -78,16 +61,31 @@ function Home() {
     fetchData()
   }
 
+  const handleUpdateTabs = async (category) => {
+    setCategory(category)
+    const fetchData = async () => {
+      try {
+        getTasks()
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+    fetchData()
+  }
+
+  const getTasks = async () => {
+    try {
+      const response = await api.getTasks(category)
+      setData(response)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.getTasks(category)
-        setData(response)
-        setTasks(
-          response.data.map((task) => (
-            <Task key={task.id} content={task} onDelete={handleDelete} onUpdate={handleUpdate} />
-          )),
-        )
+        getTasks()
       } catch (error) {
         console.error('Error fetching data:', error)
       }
@@ -95,46 +93,41 @@ function Home() {
     fetchData()
   }, [category])
 
-  const handleClick = async (category) => {
-    setCategory(category)
-    const fetchData = async () => {
-      try {
-        const response = await api.getTasks(category)
-        setData(response)
-        setTasks(
-          response.data.map((task) => (
-            <Task key={task.id} content={task} onDelete={handleDelete} onUpdate={handleUpdate} />
-          )),
-        )
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      }
-    }
-    fetchData()
-  }
-
   return (
     <>
-      <div className="new-task">
+      <header className="new-task">
         <input
           placeholder="Task To Be Done..."
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         ></input>
         <Button content="Add" onClick={() => handleCreate(inputValue)} />
-      </div>
-      <div className="tabs">
-        <a id={category === 'all' ? 'active' : ''} onClick={() => handleClick('all')}>
+      </header>
+      <nav className="tabs">
+        <a
+          className={category === STATUS.ALL ? 'active' : ''}
+          onClick={() => handleUpdateTabs(STATUS.ALL)}
+        >
           All({data.info.all})
         </a>
-        <a id={category === 'inWork' ? 'active' : ''} onClick={() => handleClick('inWork')}>
+        <a
+          className={category === STATUS.INWORK ? 'active' : ''}
+          onClick={() => handleUpdateTabs(STATUS.INWORK)}
+        >
           At work({data.info.inWork})
         </a>
-        <a id={category === 'completed' ? 'active' : ''} onClick={() => handleClick('completed')}>
+        <a
+          className={category === STATUS.COMPLETED ? 'active' : ''}
+          onClick={() => handleUpdateTabs(STATUS.COMPLETED)}
+        >
           Done({data.info.completed})
         </a>
-      </div>
-      <div>{tasks}</div>
+      </nav>
+      <main>
+        {data.data.map((task) => (
+          <Task key={task.id} content={task} onDelete={handleDelete} onUpdate={handleUpdate} />
+        ))}
+      </main>
     </>
   )
 }

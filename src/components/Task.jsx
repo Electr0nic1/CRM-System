@@ -8,7 +8,7 @@ function Task({ content, onDelete, onUpdate }) {
   const [inputValue, setInputValue] = useState(content.title)
 
   const handleUpdate = (title) => {
-    if (title === false) {
+    if (title === '') {
       setEditing(false)
       setInputValue(content.title)
       return
@@ -37,7 +37,7 @@ function Task({ content, onDelete, onUpdate }) {
           />
           <span className="task-edit">
             <Button content={'save'} onClick={() => handleUpdate(inputValue)} />
-            <Button content={'cancel'} onClick={() => handleUpdate(false)} />
+            <Button content={'cancel'} onClick={() => handleUpdate('')} />
           </span>
         </>
       ) : (

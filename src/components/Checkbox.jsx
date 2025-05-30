@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import checkImg from '../assets/check.png'
 
 function Checkbox({ content, onClick }) {
   const [checked, setChecked] = useState(content.isDone)
@@ -12,6 +13,7 @@ function Checkbox({ content, onClick }) {
         onClick={onClick}
       />
       <span></span>
+      <img src={checkImg} alt="checkbox" />
     </label>
   )
 }

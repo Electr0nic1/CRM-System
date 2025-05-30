@@ -1,11 +1,13 @@
-const url = 'https://easydev.club/api/v1'
+import { API_URL } from '../helpers/config'
+
+const url = API_URL
 
 const api = {
   async getTasks(status = 'all') {
-    let response
     try {
-      response = await fetch(`${url}/todos?filter=${status} `, {
+      const response = await fetch(`${url}/todos?filter=${status} `, {
         method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
       })
 
       if (!response.ok) {
@@ -20,9 +22,8 @@ const api = {
   },
 
   async createTask(task) {
-    let response
     try {
-      response = await fetch(`${url}/todos`, {
+      const response = await fetch(`${url}/todos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -42,16 +43,16 @@ const api = {
   },
 
   async deleteTask(id) {
-    let response
     try {
-      response = await fetch(`${url}/todos/${id}`, {
+      const response = await fetch(`${url}/todos/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       })
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`)
       }
-      return response.text()
+      const text = await response.text()
+      return text
     } catch (error) {
       console.error(error.message)
       throw error
@@ -59,9 +60,8 @@ const api = {
   },
 
   async updateTask(task, id, bool) {
-    let response
     try {
-      response = await fetch(`${url}/todos/${id}`, {
+      const response = await fetch(`${url}/todos/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
