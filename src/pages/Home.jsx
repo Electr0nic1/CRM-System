@@ -61,10 +61,6 @@ function Home() {
     fetchData()
   }
 
-  const handleUpdateTabs = async (category) => {
-    setCategory(category)
-  }
-
   const getTasks = async () => {
     try {
       const response = await api.getTasks(category)
@@ -98,19 +94,19 @@ function Home() {
       <nav className="tabs">
         <a
           className={category === STATUS.ALL ? 'active' : ''}
-          onClick={() => handleUpdateTabs(STATUS.ALL)}
+          onClick={() => setCategory(STATUS.ALL)}
         >
           All({data.info.all})
         </a>
         <a
           className={category === STATUS.INWORK ? 'active' : ''}
-          onClick={() => handleUpdateTabs(STATUS.INWORK)}
+          onClick={() => setCategory(STATUS.INWORK)}
         >
           At work({data.info.inWork})
         </a>
         <a
           className={category === STATUS.COMPLETED ? 'active' : ''}
-          onClick={() => handleUpdateTabs(STATUS.COMPLETED)}
+          onClick={() => setCategory(STATUS.COMPLETED)}
         >
           Done({data.info.completed})
         </a>
