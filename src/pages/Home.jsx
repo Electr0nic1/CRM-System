@@ -63,14 +63,6 @@ function Home() {
 
   const handleUpdateTabs = async (category) => {
     setCategory(category)
-    const fetchData = async () => {
-      try {
-        getTasks()
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      }
-    }
-    fetchData()
   }
 
   const getTasks = async () => {
