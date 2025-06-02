@@ -3,7 +3,7 @@ import Checkbox from './Checkbox.jsx'
 import Button from './Button.jsx'
 import api from '../api/api.js'
 
-function Task({ content, onDelete, onUpdate }) {
+function TaskItem({ content, onDelete, onUpdate }) {
   const [editing, setEditing] = useState(false)
   const [inputValue, setInputValue] = useState(content.title)
 
@@ -51,4 +51,4 @@ function Task({ content, onDelete, onUpdate }) {
   )
 }
 
-export default Task
+export default TaskItem

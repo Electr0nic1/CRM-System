@@ -22,6 +22,8 @@ function Button({ content, onClick }) {
       className = 'btn-cancel'
       content = <img src={cancelImg} alt="Delete" />
       break
+    default:
+      className = ''
   }
 
   return (

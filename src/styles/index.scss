@@ -1,7 +1,9 @@
 @use './reset';
-@use './home';
+@use './todoListPage';
+@use './taskItem';
+@use './taskAdd';
+@use './taskSwitch';
 @use './button';
-@use './task';
 @use './checkbox';
 
 @font-face {

@@ -1,0 +1,25 @@
+.tabs {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
+  flex-direction: row;
+  margin: 0 auto;
+  padding: 0.5rem;
+
+  .tab-link {
+    display: inline;
+    background-color: inherit;
+    color: #213547;
+    padding: 0;
+  }
+
+  .tab-link:hover {
+    color: #007bff;
+    text-decoration: underline;
+  }
+
+  .active {
+    color: #007bff;
+    text-decoration: underline;
+  }
+}

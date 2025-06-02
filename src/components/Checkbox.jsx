@@ -3,6 +3,7 @@ import checkImg from '../assets/check.png'
 
 function Checkbox({ content, onClick }) {
   const [checked, setChecked] = useState(content.isDone)
+
   return (
     <label className="checkbox">
       <input
