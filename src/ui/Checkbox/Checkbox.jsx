@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import checkImg from '../../assets/check.png'
+import checkImg from '@assets/check.png'
 
 function Checkbox({ onClick, checked }) {
   return (

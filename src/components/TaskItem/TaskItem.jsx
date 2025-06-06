@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import Checkbox from '../../ui/Checkbox/Checkbox.jsx'
-import Button from '../../ui/Button/Button.jsx'
-import { updateTask, deleteTask } from '../../api/api.js'
-import saveImg from '../../assets/save.png'
-import editImg from '../../assets/edit.png'
-import deleteImg from '../../assets/trash.png'
-import cancelImg from '../../assets/cancel.png'
+import Checkbox from '@ui/Checkbox/Checkbox.jsx'
+import Button from '@ui/Button/Button.jsx'
+import { updateTask, deleteTask } from '@api/api.js'
+import saveImg from '@assets/save.png'
+import editImg from '@assets/edit.png'
+import deleteImg from '@assets/trash.png'
+import cancelImg from '@assets/cancel.png'
 
 function TaskItem({ task, updateTasks }) {
   const [isEditing, setIsEditing] = useState(false)

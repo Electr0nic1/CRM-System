@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import Button from '../../ui/Button/Button.jsx'
-import { createTask } from '../../api/api.js'
+import Button from '@ui/Button/Button.jsx'
+import { createTask } from '@api/api.js'
 
 function TaskAdd({ updateTasks }) {
   const [inputValue, setInputValue] = useState('')

@@ -1,4 +1,4 @@
-import { API_URL } from '../helpers/config'
+import { API_URL } from '@helpers/config'
 
 const url = API_URL
 

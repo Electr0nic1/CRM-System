@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { STATUS } from '../../helpers/status.js'
+import { STATUS } from '@helpers/status.js'
 
 function TaskSwitch({ filter, updateTasks, category }) {
   return (

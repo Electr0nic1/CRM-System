@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import TaskAdd from '../../components/TaskAdd/TaskAdd.jsx'
-import TaskSwitch from '../../components/TaskSwitch/TaskSwitch.jsx'
-import TaskList from '../../components/TaskList/TaskList.jsx'
-import { getTasks } from '../../api/api.js'
+import TaskAdd from '@components/TaskAdd/TaskAdd.jsx'
+import TaskSwitch from '@components/TaskSwitch/TaskSwitch.jsx'
+import TaskList from '@components/TaskList/TaskList.jsx'
+import { getTasks } from '@api/api.js'
 
 function TodoListPage() {
   const [category, setCategory] = useState('all')
