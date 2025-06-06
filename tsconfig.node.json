@@ -13,6 +13,17 @@
     "moduleDetection": "force",
     "noEmit": true,
 
+    "types": ["node"],
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "src",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@assets/*": ["assets/*"],
+      "@api/*": ["api/*"],
+      "@ui/*": ["ui/*"],
+      "@helpers/*": ["helpers/*"]
+    },
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
