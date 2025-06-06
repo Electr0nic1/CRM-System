@@ -1,8 +1,8 @@
-@use './reset';
-@use '../pages/TodoListPage/todoListPage';
-@use '../components/taskItem/taskItem';
-@use '../components/taskAdd/taskAdd';
-@use '../components/taskSwitch/taskSwitch';
+@use './reset.scss';
+@use '../pages/TodoListPage/todoListPage.scss';
+@use '../components/taskItem/taskItem.scss';
+@use '../components/taskAdd/taskAdd.scss';
+@use '../components/taskSwitch/taskSwitch.scss';
 @use '../ui/button/button.scss';
 @use '../ui/checkbox/checkbox.scss';
 
