@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles/index.scss'
-import TodoListPage from './pages/TodoListPage.jsx'
+import TodoListPage from './pages/TodoListPage/TodoListPage.jsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

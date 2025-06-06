@@ -1,25 +1,25 @@
 button {
   cursor: pointer;
-  background-color: #007bff;
+  background-color: var(--color-primary);
   border: none;
   color: white;
   padding: 10px 40px;
   border-radius: 5px;
 }
 
-.btn-delete {
-  background-color: red;
+.btn-danger {
+  background-color: var(--color-danger);
 }
 
-.btn-save {
-  background-color: rgb(16, 215, 16);
+.btn-success {
+  background-color: var(--color-success);
 }
 
 .btn-cancel {
-  background-color: #a6a6a6;
+  background-color: var(--color-cancel);
 }
 
-.btn-delete, .btn-edit, .btn-save, .btn-cancel {
+.btn-img {
   padding: 0;
   width: 3rem;
   height: 3rem;

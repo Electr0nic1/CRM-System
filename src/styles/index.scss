@@ -1,10 +1,10 @@
 @use './reset';
-@use './todoListPage';
-@use './taskItem';
-@use './taskAdd';
-@use './taskSwitch';
-@use './button';
-@use './checkbox';
+@use '../pages/TodoListPage/todoListPage';
+@use '../components/taskItem/taskItem';
+@use '../components/taskAdd/taskAdd';
+@use '../components/taskSwitch/taskSwitch';
+@use '../ui/button/button.scss';
+@use '../ui/checkbox/checkbox.scss';
 
 @font-face {
   font-family: 'Inter';
@@ -19,12 +19,22 @@
   font-weight: 400;
   font-optical-sizing: auto;
   font-style: normal;
-  color: #213547;
-  background-color: #dee5f5;
+  color: var(--color-text);
+  background-color: var(--color-background);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --color-primary: #007bff;
+  --color-secondary: #6c757d;
+  --color-success: #28a745;
+  --color-danger: #dc3545;
+  --color-warning: #ffc107;
+  --color-info: #17a2b8;
+  --color-cancel: #adb5bd;
+  --color-background: #dee5f5;
+  --color-text: #212529;  
 }
 
 body {
