@@ -1,0 +1,25 @@
+.new-task {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 900px;
+  min-width: 650px;
+  margin: 0 auto;
+  padding: 0.5rem;
+
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    font-size: 1rem;
+    min-width: 200px;
+    background-color: inherit;
+    text-align: left;
+  }
+
+  input:placeholder-shown {
+    color: #aaa;
+  }
+}

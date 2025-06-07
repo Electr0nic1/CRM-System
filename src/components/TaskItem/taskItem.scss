@@ -1,0 +1,39 @@
+.task {
+  display: grid;
+  flex-direction: row;
+  grid-template-columns: 1fr 2fr 1.2fr 1fr;
+  align-items: center;
+  justify-items: center;
+  margin: 0 auto;
+  padding: 0.5rem;
+
+  p {
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 200px;
+  }
+
+  input[type='checkbox'] {
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    background-color: var(--color-primary);
+    appearance: auto;
+  }
+}
+
+.task-edit {
+  display: flex;
+  gap: 1rem;
+  flex-direction: row;
+  margin: 0 15px;
+}
+
+.edit-input {
+  background-color: #a6a6a6;
+  color: #000000;
+  text-align: left;
+}
