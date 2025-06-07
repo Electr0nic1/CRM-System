@@ -35,7 +35,9 @@ function TaskAdd({ updateTasks }) {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
       ></input>
-      <Button children="Add" color="primary" type="submit" />
+      <Button color="primary" type="submit">
+        Add
+      </Button>
     </form>
   )
 }
