@@ -23,6 +23,10 @@
     background-color: var(--color-primary);
     appearance: auto;
   }
+
+  .ant-checkbox-inner {
+    border-radius: 100%;
+  }
 }
 
 .task-edit {
@@ -33,7 +37,5 @@
 }
 
 .edit-input {
-  background-color: #a6a6a6;
-  color: #000000;
   text-align: left;
 }

@@ -1,14 +1,18 @@
 import { useState } from 'react'
-import Button from '@ui/Button/Button.jsx'
+import { Button, Col, Row, Input, message } from 'antd'
 import { createTask } from '@api/api.js'
 
 function TaskAdd({ updateTasks }) {
   const [inputValue, setInputValue] = useState('')
+  const [messageApi, contextHolder] = message.useMessage()
 
   const handleCreate = async (title) => {
     const trimmedTitle = title.trim()
     if (trimmedTitle.length < 2 || trimmedTitle.length > 64) {
-      alert('Please enter a task')
+      messageApi.open({
+        type: 'error',
+        content: 'Please enter a task title between 2 and 64 characters.',
+      })
       return
     }
 
@@ -18,7 +22,10 @@ function TaskAdd({ updateTasks }) {
       setInputValue('')
     } catch (error) {
       console.error('Error fetching data:', error)
-      alert('Failed to create task. Please try again.')
+      messageApi.open({
+        type: 'error',
+        content: 'Failed to create task. Please try again.',
+      })
     }
   }
 
@@ -30,14 +37,26 @@ function TaskAdd({ updateTasks }) {
         handleCreate(inputValue)
       }}
     >
-      <input
-        placeholder="Task To Be Done..."
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-      ></input>
-      <Button color="primary" type="submit">
-        Add
-      </Button>
+      {contextHolder}
+      <Row>
+        <Col span={18}>
+          <Input
+            placeholder="Task To Be Done..."
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            count={{
+              show: true,
+              min: 2,
+              max: 64,
+            }}
+          ></Input>
+        </Col>
+        <Col span={4} offset={2}>
+          <Button type="primary" htmlType="submit" block="true">
+            Add
+          </Button>
+        </Col>
+      </Row>
     </form>
   )
 }
