@@ -20,7 +20,7 @@
       "@components/*": ["components/*"],
       "@assets/*": ["assets/*"],
       "@api/*": ["api/*"],
-      "@ui/*": ["ui/*"],
+      "@pages/*": ["pages/*"],
       "@helpers/*": ["helpers/*"]
     },
 

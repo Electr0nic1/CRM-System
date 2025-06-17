@@ -4,6 +4,7 @@ import { message } from 'antd'
 import TaskAdd from '@components/TaskAdd/TaskAdd.jsx'
 import TaskSwitch from '@components/TaskSwitch/TaskSwitch.jsx'
 import TaskList from '@components/TaskList/TaskList.jsx'
+import Sidebar from '@components/Sidebar/Sidebar'
 
 import { getTasks } from '@api/api.js'
 
@@ -33,11 +34,18 @@ function TodoListPage() {
 
   useEffect(() => {
     fetchTasks()
+
+    const interval = setInterval(() => {
+      fetchTasks()
+    }, 5000)
+
+    return () => clearInterval(interval)
   }, [category])
 
   return (
     <>
       {contextHolder}
+      <Sidebar />
       <TaskAdd updateTasks={fetchTasks} />
       <TaskSwitch filter={filter} updateTasks={setCategory} category={category} />
       <TaskList tasks={tasks} updateTasks={fetchTasks} />

@@ -9,7 +9,6 @@ import cancelImg from '@assets/cancel.png'
 function TaskItem({ task, updateTasks }) {
   const [isEditing, setIsEditing] = useState(false)
   const [titleValue, setTitleValue] = useState(task.title)
-  const [isChecked, setIsChecked] = useState(task.isDone)
   const [messageApi, contextHolder] = message.useMessage()
 
   const handleSave = async (title) => {
@@ -43,7 +42,6 @@ function TaskItem({ task, updateTasks }) {
 
   const handleCheckboxClick = async () => {
     try {
-      setIsChecked(!isChecked)
       await updateTask({ ...task, isDone: !task.isDone })
       await updateTasks()
     } catch (error) {
@@ -70,7 +68,7 @@ function TaskItem({ task, updateTasks }) {
 
   return (
     <div className="task">
-      <Checkbox onChange={handleCheckboxClick} checked={isChecked} />
+      <Checkbox onChange={handleCheckboxClick} checked={task.isDone} />
       {contextHolder}
       {isEditing ? (
         <>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Col, Row, Input, message } from 'antd'
+import { Button, Col, Row, Input, message, Form } from 'antd'
 import { createTask } from '@api/api.js'
 
 function TaskAdd({ updateTasks }) {
@@ -30,13 +30,7 @@ function TaskAdd({ updateTasks }) {
   }
 
   return (
-    <form
-      className="new-task"
-      onSubmit={(e) => {
-        e.preventDefault()
-        handleCreate(inputValue)
-      }}
-    >
+    <Form className="new-task" onFinish={() => handleCreate(inputValue)}>
       {contextHolder}
       <Row>
         <Col span={18}>
@@ -57,7 +51,7 @@ function TaskAdd({ updateTasks }) {
           </Button>
         </Col>
       </Row>
-    </form>
+    </Form>
   )
 }
 
