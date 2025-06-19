@@ -1,11 +1,14 @@
 import { API_URL } from '@helpers/config'
 import axios from 'axios'
 
-const url = API_URL
+const api = axios.create({
+  baseURL: API_URL,
+  timeout: 5000,
+})
 
 export async function getTasks(status = 'all') {
   try {
-    const response = await axios(`${url}/todos`, {
+    const response = await api.get('/todos', {
       params: { filter: status },
     })
 
@@ -18,7 +21,7 @@ export async function getTasks(status = 'all') {
 
 export async function createTask(title) {
   try {
-    const response = await axios.post(`${url}/todos`, {
+    const response = await api.post('/todos', {
       isDone: false,
       title: title,
     })
@@ -32,9 +35,9 @@ export async function createTask(title) {
 
 export async function deleteTask(id) {
   try {
-    const response = await axios.delete(`${url}/todos/${id}`)
+    const response = await api.delete(`/todos/${id}`)
 
-    return response.text
+    return response.data
   } catch (error) {
     console.error(error.message)
     throw error
@@ -43,7 +46,7 @@ export async function deleteTask(id) {
 
 export async function updateTask(task) {
   try {
-    const response = await axios.put(`${url}/todos/${task.id}`, {
+    const response = await api.put(`/todos/${task.id}`, {
       isDone: task.isDone,
       title: task.title,
     })

@@ -1,25 +1,19 @@
 import { useState } from 'react'
 import { Button, Col, Row, Input, message, Form } from 'antd'
+
 import { createTask } from '@api/api.js'
 
 function TaskAdd({ updateTasks }) {
-  const [inputValue, setInputValue] = useState('')
   const [messageApi, contextHolder] = message.useMessage()
+  const [form] = Form.useForm()
 
-  const handleCreate = async (title) => {
-    const trimmedTitle = title.trim()
-    if (trimmedTitle.length < 2 || trimmedTitle.length > 64) {
-      messageApi.open({
-        type: 'error',
-        content: 'Please enter a task title between 2 and 64 characters.',
-      })
-      return
-    }
+  const handleCreate = async (values) => {
+    const title = values.title
 
     try {
-      await createTask(trimmedTitle)
+      await createTask(title)
       await updateTasks()
-      setInputValue('')
+      form.resetFields()
     } catch (error) {
       console.error('Error fetching data:', error)
       messageApi.open({
@@ -30,20 +24,33 @@ function TaskAdd({ updateTasks }) {
   }
 
   return (
-    <Form className="new-task" onFinish={() => handleCreate(inputValue)}>
+    <Form className="new-task" form={form} onFinish={handleCreate}>
       {contextHolder}
       <Row>
         <Col span={18}>
-          <Input
-            placeholder="Task To Be Done..."
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            count={{
-              show: true,
-              min: 2,
-              max: 64,
-            }}
-          ></Input>
+          <Form.Item
+            name="title"
+            rules={[
+              {
+                required: true,
+                message: 'Task title is required',
+                validator: (_, value) => {
+                  if (!value || value.trim().length === 0) {
+                    return Promise.reject('Task title is required')
+                  }
+                  if (value.trim().length < 2) {
+                    return Promise.reject('Title must be at least 2 characters')
+                  }
+                  if (value.trim().length > 64) {
+                    return Promise.reject('Title must be at most 64 characters')
+                  }
+                  return Promise.resolve()
+                },
+              },
+            ]}
+          >
+            <Input placeholder="Task To Be Done..." count={{ show: true, min: 2, max: 64 }} />
+          </Form.Item>
         </Col>
         <Col span={4} offset={2}>
           <Button type="primary" htmlType="submit" block="true">

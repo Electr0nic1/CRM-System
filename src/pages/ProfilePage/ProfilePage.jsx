@@ -1,7 +1,7 @@
 import React from 'react'
 import Sidebar from '@components/Sidebar/Sidebar'
 
-function Profile() {
+function ProfilePage() {
   return (
     <div>
       <Sidebar />
@@ -10,4 +10,4 @@ function Profile() {
   )
 }
 
-export default Profile
+export default ProfilePage

@@ -1,4 +1,4 @@
-import TaskItem from '../TaskItem/TaskItem'
+import TaskItem from '@components/TaskItem/TaskItem'
 
 function TaskList({ tasks, updateTasks }) {
   return (

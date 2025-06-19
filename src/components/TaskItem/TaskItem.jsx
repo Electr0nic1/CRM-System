@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Checkbox, Button, Input, Col, Row, message } from 'antd'
+import { Checkbox, Button, Input, Col, Row, message, Form } from 'antd'
+
 import { updateTask, deleteTask } from '@api/api.js'
 import saveImg from '@assets/save.png'
 import editImg from '@assets/edit.png'
@@ -8,23 +9,15 @@ import cancelImg from '@assets/cancel.png'
 
 function TaskItem({ task, updateTasks }) {
   const [isEditing, setIsEditing] = useState(false)
-  const [titleValue, setTitleValue] = useState(task.title)
   const [messageApi, contextHolder] = message.useMessage()
+  const [form] = Form.useForm()
 
-  const handleSave = async (title) => {
-    const trimmedTitle = title.trim()
-    if (trimmedTitle.length < 2 || trimmedTitle.length > 64) {
-      messageApi.open({
-        type: 'error',
-        content: 'Please enter a valid task title.',
-      })
-      return
-    }
+  const handleSave = async (values) => {
+    const title = values.title
 
     try {
-      await updateTask({ ...task, title: trimmedTitle })
+      await updateTask({ ...task, title: title })
       await updateTasks()
-      setTitleValue(trimmedTitle)
       setIsEditing(false)
     } catch (error) {
       console.error('Error updating task:', error)
@@ -36,7 +29,7 @@ function TaskItem({ task, updateTasks }) {
   }
 
   const handleCancel = () => {
-    setTitleValue(task.title)
+    form.setFieldsValue({ title: task.title })
     setIsEditing(false)
   }
 
@@ -67,28 +60,48 @@ function TaskItem({ task, updateTasks }) {
   }
 
   return (
-    <div className="task">
+    <Form className="task" form={form} initialValues={{ title: task.title }} onFinish={handleSave}>
       <Checkbox onChange={handleCheckboxClick} checked={task.isDone} />
       {contextHolder}
       {isEditing ? (
         <>
-          <Input
-            value={titleValue}
-            onChange={(e) => setTitleValue(e.target.value)}
-            className="edit-input"
-            count={{
-              show: true,
-              min: 2,
-              max: 64,
-            }}
-          />
+          <Form.Item
+            name="title"
+            rules={[
+              {
+                required: true,
+                message: 'Task title is required',
+                validator: (_, value) => {
+                  if (!value || value.trim().length === 0) {
+                    return Promise.reject('Task title is required')
+                  }
+                  if (value.trim().length < 2) {
+                    return Promise.reject('Title must be at least 2 characters')
+                  }
+                  if (value.trim().length > 64) {
+                    return Promise.reject('Title must be at most 64 characters')
+                  }
+                  return Promise.resolve()
+                },
+              },
+            ]}
+          >
+            <Input
+              className="edit-input"
+              count={{
+                show: true,
+                min: 2,
+                max: 64,
+              }}
+            />
+          </Form.Item>
           <span className="task-edit">
             <Button
-              onClick={() => handleSave(titleValue)}
               color="green"
               variant="solid"
               style={{ padding: 0, width: 40, height: 40 }}
               size="large"
+              htmlType="submit"
             >
               <img
                 src={saveImg}
@@ -134,7 +147,7 @@ function TaskItem({ task, updateTasks }) {
       >
         <img src={deleteImg} alt="Delete" style={{ width: 20, height: 20, objectFit: 'contain' }} />
       </Button>
-    </div>
+    </Form>
   )
 }
 
