@@ -34,18 +34,14 @@ function TaskAdd({ updateTasks }) {
               {
                 required: true,
                 message: 'Task title is required',
-                validator: (_, value) => {
-                  if (!value || value.trim().length === 0) {
-                    return Promise.reject('Task title is required')
-                  }
-                  if (value.trim().length < 2) {
-                    return Promise.reject('Title must be at least 2 characters')
-                  }
-                  if (value.trim().length > 64) {
-                    return Promise.reject('Title must be at most 64 characters')
-                  }
-                  return Promise.resolve()
-                },
+              },
+              {
+                min: 2,
+                message: 'Task title must be at least 2 characters',
+              },
+              {
+                max: 64,
+                message: 'Task title cannot exceed 64 characters',
               },
             ]}
           >

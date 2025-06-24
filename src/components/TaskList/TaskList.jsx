@@ -1,12 +1,16 @@
 import TaskItem from '@components/TaskItem/TaskItem'
+import { List } from 'antd'
 
 function TaskList({ tasks, updateTasks }) {
   return (
-    <main>
-      {tasks.map((task) => (
-        <TaskItem key={task.id} task={task} updateTasks={updateTasks} />
-      ))}
-    </main>
+    <List
+      dataSource={tasks}
+      renderItem={(task) => (
+        <List.Item key={task.id}>
+          <TaskItem task={task} updateTasks={updateTasks} />
+        </List.Item>
+      )}
+    ></List>
   )
 }
 

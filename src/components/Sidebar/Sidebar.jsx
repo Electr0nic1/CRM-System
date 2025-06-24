@@ -1,17 +1,20 @@
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
+import { Typography, Menu } from 'antd'
+
+const { Title } = Typography
 
 function Sidebar() {
   return (
     <div className="sidebar">
-      <h2>Sidebar</h2>
-      <ul>
-        <li>
+      <Title level={2}>Sidebar</Title>
+      <Menu mode="inline" className="sidebar-menu">
+        <Menu.Item key="1">
           <Link to="/">Todo List Page</Link>
-        </li>
-        <li>
+        </Menu.Item>
+        <Menu.Item key="2">
           <Link to="/profile">Profile Page</Link>
-        </li>
-      </ul>
+        </Menu.Item>
+      </Menu>
     </div>
   )
 }

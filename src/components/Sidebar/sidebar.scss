@@ -9,19 +9,11 @@
   background-color: var(--color-background2);
   height: 100vh;
 
-  h2 {
-    font-size: 2rem;
+  .sidebar-menu {
+    background-color: inherit;
   }
 
   li {
     font-size: 1.2rem;
-    color: var(--color-secondary);
-    cursor: pointer;
-    transition: 0.3s ease-in-out;
-    margin-bottom: 15px;
-  }
-
-  li:hover {
-    color: var(--color-primary);
   }
 }
