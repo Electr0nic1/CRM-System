@@ -1,7 +1,9 @@
-import TaskItem from '@components/TaskItem/TaskItem'
+import React from 'react'
+import TaskItem from '../../components/TaskItem/TaskItem'
 import { List } from 'antd'
+import type { TaskListProps } from '../../types'
 
-function TaskList({ tasks, updateTasks }) {
+const TaskList: React.FC<TaskListProps> = ({ tasks, updateTasks }) => {
   return (
     <List
       dataSource={tasks}

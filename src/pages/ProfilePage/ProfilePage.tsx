@@ -1,10 +1,10 @@
 import React from 'react'
-import Sidebar from '@components/Sidebar/Sidebar'
+import Sidebar from '../../components/Sidebar/Sidebar'
 import { Typography } from 'antd'
 
 const { Title } = Typography
 
-function ProfilePage() {
+const ProfilePage: React.FC =() => {
   return (
     <>
       <Sidebar />

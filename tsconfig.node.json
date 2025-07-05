@@ -21,7 +21,8 @@
       "@assets/*": ["assets/*"],
       "@api/*": ["api/*"],
       "@pages/*": ["pages/*"],
-      "@helpers/*": ["helpers/*"]
+      "@helpers/*": ["helpers/*"],
+      "@types/*": ["types/*"]
     },
 
     /* Linting */

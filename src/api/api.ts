@@ -1,4 +1,4 @@
-import { API_URL } from '@helpers/config'
+import { API_URL } from '../helpers/config.ts'
 import axios from 'axios'
 
 const api = axios.create({
@@ -14,12 +14,17 @@ export async function getTasks(status = 'all') {
 
     return response.data
   } catch (error) {
-    console.error(error.message)
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error(error)
+    }
+
     throw error
   }
 }
 
-export async function createTask(title) {
+export async function createTask(title: string) {
   try {
     const response = await api.post('/todos', {
       isDone: false,
@@ -28,23 +33,33 @@ export async function createTask(title) {
 
     return response.data
   } catch (error) {
-    console.error(error.message)
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error(error)
+    }
+
     throw error
   }
 }
 
-export async function deleteTask(id) {
+export async function deleteTask(id: number) {
   try {
     const response = await api.delete(`/todos/${id}`)
 
     return response.data
   } catch (error) {
-    console.error(error.message)
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error(error)
+    }
+
     throw error
   }
 }
 
-export async function updateTask(task) {
+export async function updateTask(task: { id: number; isDone: boolean; title: string }) {
   try {
     const response = await api.put(`/todos/${task.id}`, {
       isDone: task.isDone,
@@ -53,7 +68,13 @@ export async function updateTask(task) {
 
     return response.data
   } catch (error) {
-    console.error(error.message)
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error(error)
+    }
+
+
     throw error
   }
 }

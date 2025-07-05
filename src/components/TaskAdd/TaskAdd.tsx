@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import React from 'react'
 import { Button, Col, Row, Input, message, Form } from 'antd'
 
-import { createTask } from '@api/api.js'
+import { createTask } from '../../api/api.ts'
+import type { TaskAddProps } from '../../types'
 
-function TaskAdd({ updateTasks }) {
+const TaskAdd: React.FC<TaskAddProps> = ( {updateTasks} ) =>  {
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm()
 
-  const handleCreate = async (values) => {
+  const handleCreate = async (values: { title: string }) => {
     const title = values.title
 
     try {
@@ -45,11 +46,11 @@ function TaskAdd({ updateTasks }) {
               },
             ]}
           >
-            <Input placeholder="Task To Be Done..." count={{ show: true, min: 2, max: 64 }} />
+            <Input placeholder="Task To Be Done..." count={{ show: true, max: 64 }} />
           </Form.Item>
         </Col>
         <Col span={4} offset={2}>
-          <Button type="primary" htmlType="submit" block="true">
+          <Button type="primary" htmlType="submit" block>
             Add
           </Button>
         </Col>

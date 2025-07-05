@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import { STATUS } from '@helpers/status.js'
+import React from 'react'
+import { STATUS } from '../../helpers/status.ts'
 import { Button, Col, Row } from 'antd'
+import type { TaskSwitchProps } from '../../types'
 
-function TaskSwitch({ filter, updateTasks, category }) {
+const TaskSwitch: React.FC<TaskSwitchProps> = ({ filter, updateTasks, category }) => {
   return (
     <nav className="tabs">
       <Row>

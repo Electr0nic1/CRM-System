@@ -1,18 +1,19 @@
-import { useState, useEffect } from 'react'
-import { Checkbox, Button, Input, Col, Row, message, Form } from 'antd'
+import React, { useState } from 'react'
+import { Checkbox, Button, Input, message, Form } from 'antd'
 
-import { updateTask, deleteTask } from '@api/api.js'
+import { updateTask, deleteTask } from '../../api/api.ts'
+import type { TaskItemProps } from '../../types'
 import saveImg from '@assets/save.png'
 import editImg from '@assets/edit.png'
 import deleteImg from '@assets/trash.png'
 import cancelImg from '@assets/cancel.png'
 
-function TaskItem({ task, updateTasks }) {
+const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm()
 
-  const handleSave = async (values) => {
+  const handleSave = async (values: { title: string }) => {
     const title = values.title
 
     try {
@@ -46,7 +47,7 @@ function TaskItem({ task, updateTasks }) {
     }
   }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: number) => {
     try {
       await deleteTask(id)
       await updateTasks()
@@ -86,7 +87,6 @@ function TaskItem({ task, updateTasks }) {
               className="edit-input"
               count={{
                 show: true,
-                min: 2,
                 max: 64,
               }}
             />

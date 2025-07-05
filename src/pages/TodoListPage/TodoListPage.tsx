@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { message } from 'antd'
 
-import TaskAdd from '@components/TaskAdd/TaskAdd.jsx'
-import TaskSwitch from '@components/TaskSwitch/TaskSwitch.jsx'
-import TaskList from '@components/TaskList/TaskList.jsx'
-import Sidebar from '@components/Sidebar/Sidebar'
+import TaskAdd from '../../components/TaskAdd/TaskAdd'
+import TaskSwitch from '../../components/TaskSwitch/TaskSwitch'
+import TaskList from '../../components/TaskList/TaskList'
+import Sidebar from '../../components/Sidebar/Sidebar'
 
-import { getTasks } from '@api/api.js'
+import { getTasks } from '../../api/api.js'
 
-function TodoListPage() {
+const TodoListPage: React.FC = () => {
   const [category, setCategory] = useState('all')
   const [tasks, setTasks] = useState([])
   const [filter, setFilter] = useState({
@@ -47,7 +47,7 @@ function TodoListPage() {
       {contextHolder}
       <Sidebar />
       <TaskAdd updateTasks={fetchTasks} />
-      <TaskSwitch filter={filter} updateTasks={setCategory} category={category} />
+      <TaskSwitch filter={filter} updateTasks={(category) => setCategory(category)} category={category} />
       <TaskList tasks={tasks} updateTasks={fetchTasks} />
     </>
   )
