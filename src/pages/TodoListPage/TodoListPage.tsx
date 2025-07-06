@@ -7,11 +7,13 @@ import TaskList from '../../components/TaskList/TaskList'
 import Sidebar from '../../components/Sidebar/Sidebar'
 
 import { getTasks } from '../../api/api.js'
+import { TIMEOUT } from '../../helpers/constants.js'
+import type { Todo, TodoInfo, TaskCategory } from '../../types/index.js'
 
 const TodoListPage: React.FC = () => {
-  const [category, setCategory] = useState('all')
-  const [tasks, setTasks] = useState([])
-  const [filter, setFilter] = useState({
+  const [category, setCategory] = useState<TaskCategory>('all')
+  const [tasks, setTasks] = useState<Todo[]>([])
+  const [filter, setFilter] = useState<TodoInfo>({
     all: 0,
     inWork: 0,
     completed: 0,
@@ -37,7 +39,7 @@ const TodoListPage: React.FC = () => {
 
     const interval = setInterval(() => {
       fetchTasks()
-    }, 5000)
+    }, TIMEOUT)
 
     return () => clearInterval(interval)
   }, [category])

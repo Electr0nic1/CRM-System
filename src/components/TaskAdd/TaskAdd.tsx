@@ -1,8 +1,12 @@
 import React from 'react'
 import { Button, Col, Row, Input, message, Form } from 'antd'
-
 import { createTask } from '../../api/api.ts'
-import type { TaskAddProps } from '../../types'
+
+import { INPUT_LENGTH } from '../../helpers/constants.ts'
+
+type TaskAddProps = {
+  updateTasks: () => Promise<void>
+}
 
 const TaskAdd: React.FC<TaskAddProps> = ( {updateTasks} ) =>  {
   const [messageApi, contextHolder] = message.useMessage()
@@ -16,7 +20,6 @@ const TaskAdd: React.FC<TaskAddProps> = ( {updateTasks} ) =>  {
       await updateTasks()
       form.resetFields()
     } catch (error) {
-      console.error('Error fetching data:', error)
       messageApi.open({
         type: 'error',
         content: 'Failed to create task. Please try again.',
@@ -37,16 +40,16 @@ const TaskAdd: React.FC<TaskAddProps> = ( {updateTasks} ) =>  {
                 message: 'Task title is required',
               },
               {
-                min: 2,
-                message: 'Task title must be at least 2 characters',
+                min: INPUT_LENGTH.MIN,
+                message: `Task title must be at least ${INPUT_LENGTH.MIN} characters`,
               },
               {
-                max: 64,
-                message: 'Task title cannot exceed 64 characters',
+                max: INPUT_LENGTH.MAX,
+                message: `Task title cannot exceed ${INPUT_LENGTH.MAX} characters`,
               },
             ]}
           >
-            <Input placeholder="Task To Be Done..." count={{ show: true, max: 64 }} />
+            <Input placeholder="Task To Be Done..." count={{ show: true, max: INPUT_LENGTH.MAX }} />
           </Form.Item>
         </Col>
         <Col span={4} offset={2}>

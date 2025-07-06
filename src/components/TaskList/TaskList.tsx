@@ -1,7 +1,12 @@
 import React from 'react'
 import TaskItem from '../../components/TaskItem/TaskItem'
 import { List } from 'antd'
-import type { TaskListProps } from '../../types'
+import type { Todo } from '../../types'
+
+type TaskListProps = {
+  tasks: Todo[]
+  updateTasks: () => Promise<void>
+}
 
 const TaskList: React.FC<TaskListProps> = ({ tasks, updateTasks }) => {
   return (

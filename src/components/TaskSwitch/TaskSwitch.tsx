@@ -1,7 +1,13 @@
 import React from 'react'
 import { STATUS } from '../../helpers/status.ts'
 import { Button, Col, Row } from 'antd'
-import type { TaskSwitchProps } from '../../types'
+import type { TodoInfo, TaskCategory } from '../../types'
+
+type TaskSwitchProps = {
+  filter: TodoInfo
+  updateTasks: (category: TaskCategory) => void
+  category: TaskCategory
+}
 
 const TaskSwitch: React.FC<TaskSwitchProps> = ({ filter, updateTasks, category }) => {
   return (

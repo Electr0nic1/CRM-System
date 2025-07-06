@@ -1,12 +1,13 @@
 import { API_URL } from '../helpers/config.ts'
 import axios from 'axios'
+import type { Todo, TodoInfo, TaskCategory } from '../types/index.ts'
 
 const api = axios.create({
   baseURL: API_URL,
   timeout: 5000,
 })
 
-export async function getTasks(status = 'all') {
+export async function getTasks(status: TaskCategory = 'all'): Promise<{ data: Todo[]; info: TodoInfo }> {
   try {
     const response = await api.get('/todos', {
       params: { filter: status },
@@ -14,17 +15,11 @@ export async function getTasks(status = 'all') {
 
     return response.data
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message)
-    } else {
-      console.error(error)
-    }
-
     throw error
   }
 }
 
-export async function createTask(title: string) {
+export async function createTask(title: string): Promise<Todo> {
   try {
     const response = await api.post('/todos', {
       isDone: false,
@@ -33,33 +28,21 @@ export async function createTask(title: string) {
 
     return response.data
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message)
-    } else {
-      console.error(error)
-    }
-
     throw error
   }
 }
 
-export async function deleteTask(id: number) {
+export async function deleteTask(id: number): Promise<string> {
   try {
     const response = await api.delete(`/todos/${id}`)
 
     return response.data
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message)
-    } else {
-      console.error(error)
-    }
-
     throw error
   }
 }
 
-export async function updateTask(task: { id: number; isDone: boolean; title: string }) {
+export async function updateTask(task: { id: number; isDone: boolean; title: string }) : Promise<Todo> {
   try {
     const response = await api.put(`/todos/${task.id}`, {
       isDone: task.isDone,
@@ -68,13 +51,6 @@ export async function updateTask(task: { id: number; isDone: boolean; title: str
 
     return response.data
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message)
-    } else {
-      console.error(error)
-    }
-
-
     throw error
   }
 }

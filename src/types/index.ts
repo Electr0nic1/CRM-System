@@ -1,7 +1,4 @@
-export interface TodoRequest {
-  title?: string
-  isDone?: boolean
-}
+export type TodoRequest = Partial<Pick<Todo, 'title' | 'isDone'>>
 
 export interface Todo {
   id: number
@@ -16,30 +13,12 @@ export interface TodoInfo {
   inWork: number
 }
 
+export type TaskCategory = keyof TodoInfo
+
 export interface MetaResponse<T, N> {
   data: T[]
   info?: N
   meta: {
     totalAmount: number
   }
-}
-
-export type TaskAddProps = {
-  updateTasks: () => Promise<void>
-}
-
-export type TaskItemProps = {
-  task: Todo
-  updateTasks: () => Promise<void>
-}
-
-export type TaskListProps = {
-  tasks: Todo[]
-  updateTasks: () => Promise<void>
-}
-
-export type TaskSwitchProps = {
-  filter: TodoInfo
-  updateTasks: (category: "all" | 'inWork' | 'completed') => void
-  category: string
 }
