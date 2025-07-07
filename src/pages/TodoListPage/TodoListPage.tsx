@@ -4,7 +4,6 @@ import { message } from 'antd'
 import TaskAdd from '../../components/TaskAdd/TaskAdd'
 import TaskSwitch from '../../components/TaskSwitch/TaskSwitch'
 import TaskList from '../../components/TaskList/TaskList'
-import Sidebar from '../../components/Sidebar/Sidebar'
 
 import { getTasks } from '../../api/api.js'
 import { TIMEOUT } from '../../helpers/constants.js'
@@ -47,7 +46,6 @@ const TodoListPage: React.FC = () => {
   return (
     <>
       {contextHolder}
-      <Sidebar />
       <TaskAdd updateTasks={fetchTasks} />
       <TaskSwitch filter={filter} updateTasks={(category) => setCategory(category)} category={category} />
       <TaskList tasks={tasks} updateTasks={fetchTasks} />
