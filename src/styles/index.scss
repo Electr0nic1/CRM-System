@@ -3,8 +3,7 @@
 @use '@components/TaskItem/taskItem.scss';
 @use '@components/TaskAdd/taskAdd.scss';
 @use '@components/TaskSwitch/taskSwitch.scss';
-@use '@ui/Button/button.scss';
-@use '@ui/Checkbox/checkbox.scss';
+@use '@components/Sidebar/sidebar.scss';
 
 @font-face {
   font-family: 'Inter';
@@ -27,13 +26,14 @@
   -moz-osx-font-smoothing: grayscale;
 
   --color-primary: #007bff;
-  --color-secondary: #6c757d;
+  --color-secondary: #ffdd00;
   --color-success: #28a745;
   --color-danger: #dc3545;
   --color-warning: #ffc107;
   --color-info: #17a2b8;
   --color-cancel: #adb5bd;
   --color-background: #dee5f5;
+  --color-background2: #929fbd;
   --color-text: #212529;  
 }
 

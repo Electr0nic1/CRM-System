@@ -6,6 +6,8 @@
   justify-items: center;
   margin: 0 auto;
   padding: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
 
   p {
     text-align: left;
@@ -23,6 +25,14 @@
     background-color: var(--color-primary);
     appearance: auto;
   }
+
+  .ant-checkbox-inner {
+    border-radius: 100%;
+  }
+
+  .ant-form-item {
+    margin-bottom: 0;
+  }
 }
 
 .task-edit {
@@ -33,7 +43,5 @@
 }
 
 .edit-input {
-  background-color: #a6a6a6;
-  color: #000000;
   text-align: left;
 }
