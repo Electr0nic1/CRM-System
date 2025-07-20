@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Checkbox, Button, Input, message, Form } from 'antd'
 
 import { updateTask, deleteTask } from '../../api/api.ts'
-import { INPUT_LENGTH } from '../../helpers/constants.ts'
+import { TASK_INPUT_LENGTH } from '../../helpers/constants.ts'
 import type { Todo } from '../../types'
 
 import saveImg from '@assets/save.png'
@@ -78,12 +78,12 @@ const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
                 message: 'Task title is required',
               },
               {
-                min: INPUT_LENGTH.MIN,
-                message: `Task title must be at least ${INPUT_LENGTH.MIN} characters`,
+                min: TASK_INPUT_LENGTH.MIN,
+                message: `Task title must be at least ${TASK_INPUT_LENGTH.MIN} characters`,
               },
               {
-                max: INPUT_LENGTH.MAX,
-                message: `Task title cannot exceed ${INPUT_LENGTH.MAX} characters`,
+                max: TASK_INPUT_LENGTH.MAX,
+                message: `Task title cannot exceed ${TASK_INPUT_LENGTH.MAX} characters`,
               },
             ]}
           >
@@ -91,7 +91,7 @@ const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
               className="edit-input"
               count={{
                 show: true,
-                max: INPUT_LENGTH.MAX,
+                max: TASK_INPUT_LENGTH.MAX,
               }}
             />
           </Form.Item>

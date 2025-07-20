@@ -3,7 +3,7 @@ import { Typography } from 'antd'
 
 const { Title } = Typography
 
-const ProfilePage: React.FC =() => {
+const ProfilePage: React.FC = () => {
   return (
     <>
       <Title>Привет!!!</Title>
