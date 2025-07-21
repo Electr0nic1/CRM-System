@@ -4,7 +4,7 @@ import type { Todo, TodoInfo, TaskCategory, UserRegistration, Token, Profile } f
 
 const api = axios.create({
   baseURL: API_URL,
-  // timeout: 5000,
+  timeout: 5000,
 })
 
 api.interceptors.request.use(config => {
@@ -18,59 +18,83 @@ api.interceptors.request.use(config => {
   return config
 })
 
-// let isRefreshing = false;
-// let failedQueue: { resolve: (token: string) => void; reject: (err: any) => void }[] = [];
+let isRefreshing = false;
+let failedQueue: { resolve: (token: string) => void; reject: (err: any) => void }[] = [];
 
-// api.interceptors.response.use(
-//   response => {
-//     console.log('Response received:', response)
-//     return response
-//     },
-//   async error => {
-//     const originalRequest = error.config;
-//     console.log('Request made with ', error.config);
+function processQueue(error: any, token: string | null = null) {
+  failedQueue.forEach(prom => {
+    if (token) {
+      prom.resolve(token);
+    } else {
+      prom.reject(error);
+    }
+  });
+  failedQueue = [];
+}
 
-//     if (error.response?.status === 401 && !originalRequest._retry) {
-//       console.log('Refreshing token...');
-//       if (isRefreshing) {
-//         return new Promise((resolve, reject) => {
-//           failedQueue.push({ resolve, reject });
-//         }).then(token => {
-//           originalRequest.headers['Authorization'] = 'Bearer ' + token;
-//           return api(originalRequest);
-//         });
-//       }
+api.interceptors.response.use(
+  response => {
+    return response
+    },
+  async error => {
+    const originalRequest = error.config;
 
-//       originalRequest._retry = true;
-//       isRefreshing = true;
+    if (error.config?.url?.includes('/auth/refresh') && error.response?.status === 401) {
+      localStorage.clear();
+      window.location.href = '/auth?mode=signin';
+      return Promise.reject(error);
+    }
 
-//       try {
-//         const refreshToken = localStorage.getItem('refreshToken');
-//         const { data } = await api.post('/auth/refresh', { refreshToken: refreshToken });
 
-//         localStorage.setItem('accessToken', data.accessToken);
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
 
-//         originalRequest.headers['Authorization'] = 'Bearer ' + data.accessToken;
+      if(isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        }).then(token => {
+          originalRequest.headers['Authorization'] = 'Bearer ' + token;
+          return api(originalRequest);
+        }).catch(err => {
+          return Promise.reject(err);
+        })
+      }
 
-//         failedQueue.forEach(prom => prom.resolve(data.accessToken));
-//         failedQueue = [];
-//         isRefreshing = false;
+      isRefreshing = true;
 
-//         return api(originalRequest);
-//       } catch (err) {
-//         failedQueue.forEach(prom => prom.reject(err));
-//         failedQueue = [];
-//         isRefreshing = false;
+      try {
+        let refreshToken = localStorage.getItem('refreshToken');
+        if (!refreshToken) {
+          localStorage.clear();
+          window.location.href = '/auth?mode=signin';
+          return Promise.reject(error);
+        }
 
-//         localStorage.clear();
-//         window.location.href = '/auth?mode=signin';
-//         return Promise.reject(err);
-//       }
-//     }
+        const data = await refresh(refreshToken as string);
+        localStorage.setItem('accessToken', data.accessToken);
+        localStorage.setItem('refreshToken', data.refreshToken);
 
-//     return Promise.reject(error);
-//   }
-// );
+        api.defaults.headers.common['Authorization'] = 'Bearer ' + data.accessToken;
+
+        processQueue(null, data.accessToken);
+
+        originalRequest.headers['Authorization'] = 'Bearer ' + data.accessToken;
+        
+        return api(originalRequest);
+      } catch (err) {
+        processQueue(err, null);
+
+        localStorage.clear();
+        window.location.href = '/auth?mode=signin';
+        return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 export async function getTasks(status: TaskCategory = 'all'): Promise<{ data: Todo[]; info: TodoInfo }> {
   try {
@@ -150,7 +174,6 @@ export async function authenticateUser(authData: Partial<UserRegistration>, mode
       }
     }
   } catch (error: any) {
-    console.error('Authentication error:', error);
     const message = error.response?.data?.message || error.message || 'Authentication failed' 
     const status = error.response?.status || 500
 
@@ -167,5 +190,25 @@ export async function refresh(refreshToken: string): Promise<Token> {
     return response.data
   } catch (error) {
     throw error
+  }
+}
+
+export async function getProfile(): Promise<Profile> {
+  try {
+    const response = await api.get('/user/profile')
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function logout(): Promise<void> {
+  try {
+    await api.post('/user/logout')
+  } catch (error) {
+    throw error
+  } finally {
+    localStorage.clear()
+    window.location.href = '/auth?mode=signin'
   }
 }

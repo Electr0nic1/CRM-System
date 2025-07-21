@@ -5,7 +5,7 @@ import {
   useNavigation,
   useSubmit,
   useActionData
-} from 'react-router-dom';
+} from 'react-router';
 
 import {Form, Button, Input, Typography, Row, Col, message} from 'antd';
 

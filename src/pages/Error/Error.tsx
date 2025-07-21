@@ -6,11 +6,6 @@ const { Title } = Typography;
 
 const Error: React.FC = () => {
   const error = useRouteError() as { status: number; statusText: string; message: string } | null;
-  console.error('Error occurred:', error);
-
-  // if (error && error.status === 401) {
-  //   return <Navigate to="/auth?mode=signin" replace />
-  // }
 
   return (
     <>
