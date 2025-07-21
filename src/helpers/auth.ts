@@ -1,4 +1,7 @@
 import { redirect } from "react-router";
+
+import store from "../store";
+import { authActions } from "../store/auth";
 import { refresh } from "../api/api";
 
 export async function checkAuthLoader () {
@@ -8,12 +11,13 @@ export async function checkAuthLoader () {
     try {
       const response = await refresh(refreshToken)
 
-      localStorage.setItem('accessToken', response.accessToken);
+      store.dispatch(authActions.setAccessToken({ accessToken: response.accessToken }));
       localStorage.setItem('refreshToken', response.refreshToken);
 
       return null
   } catch (error) {
       localStorage.clear();
+      store.dispatch(authActions.removeAccessToken());
   }}
 
   return redirect('/auth?mode=signin')

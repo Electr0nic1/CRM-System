@@ -1,6 +1,9 @@
 import { API_URL } from '../helpers/config.ts'
 import axios from 'axios'
+
 import type { Todo, TodoInfo, TaskCategory, UserRegistration, Token, Profile } from '../types/index.ts'
+import store from '../store/index.ts'
+import { authActions } from '../store/auth.ts'
 
 const api = axios.create({
   baseURL: API_URL,
@@ -9,7 +12,7 @@ const api = axios.create({
 
 api.interceptors.request.use(config => {
   const isProtected = !['/auth/signin', '/auth/signup', '/auth/refresh'].includes(config.url || '')
-  const token = localStorage.getItem('accessToken')
+  const token = store.getState().auth.accessToken
 
   if (isProtected && token) {
     config.headers.Authorization = `Bearer ${token}`
@@ -41,6 +44,7 @@ api.interceptors.response.use(
 
     if (error.config?.url?.includes('/auth/refresh') && error.response?.status === 401) {
       localStorage.clear();
+      store.dispatch(authActions.removeAccessToken());
       window.location.href = '/auth?mode=signin';
       return Promise.reject(error);
     }
@@ -66,12 +70,14 @@ api.interceptors.response.use(
         let refreshToken = localStorage.getItem('refreshToken');
         if (!refreshToken) {
           localStorage.clear();
+          store.dispatch(authActions.removeAccessToken());
           window.location.href = '/auth?mode=signin';
           return Promise.reject(error);
         }
 
         const data = await refresh(refreshToken as string);
-        localStorage.setItem('accessToken', data.accessToken);
+
+        store.dispatch(authActions.setAccessToken({ accessToken: data.accessToken }));
         localStorage.setItem('refreshToken', data.refreshToken);
 
         api.defaults.headers.common['Authorization'] = 'Bearer ' + data.accessToken;
@@ -85,6 +91,7 @@ api.interceptors.response.use(
         processQueue(err, null);
 
         localStorage.clear();
+        store.dispatch(authActions.removeAccessToken());
         window.location.href = '/auth?mode=signin';
         return Promise.reject(err);
       } finally {
@@ -209,6 +216,7 @@ export async function logout(): Promise<void> {
     throw error
   } finally {
     localStorage.clear()
+    store.dispatch(authActions.removeAccessToken());
     window.location.href = '/auth?mode=signin'
   }
 }

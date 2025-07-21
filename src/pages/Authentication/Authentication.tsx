@@ -4,6 +4,8 @@ import type {ActionFunctionArgs} from "react-router";
 import AuthForm from "../../components/AuthForm/AuthForm";
 
 import {authenticateUser} from "../../api/api";
+import store from "../../store/index.ts";
+import {authActions} from "../../store/auth.ts";
 import type {UserRegistration} from "../../types/index.ts";
 
 const Authentication: React.FC = () => {
@@ -73,7 +75,8 @@ export async function action({ request }: ActionFunctionArgs) :Promise<Response 
 
   if ('token' in response) {
     const token = response.token;
-    localStorage.setItem('accessToken', token.accessToken);
+
+    store.dispatch(authActions.setAccessToken({ accessToken: token.accessToken }));
     localStorage.setItem('refreshToken', token.refreshToken);
   }
 

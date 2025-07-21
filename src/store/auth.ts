@@ -1,16 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
-const initialState = { isAuth: false }
+interface AuthState {
+  accessToken: string | null
+}
+const initialState: AuthState = { accessToken: null }
 
 const AuthSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state) {
-      state.isAuth = true
+    setAccessToken(state, action: PayloadAction<{ accessToken: string }>) {
+      state.accessToken = action.payload.accessToken
     },
-    logout(state) {
-      state.isAuth = false
+    removeAccessToken(state) {
+      state.accessToken = null
     }
   }
 })
