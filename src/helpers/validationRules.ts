@@ -1,5 +1,6 @@
-import type { RuleObject } from "antd/es/form";
-import {USERNAME_INPUT_LENGTH, LOGIN_INPUT_LENGTH, PASSWORD_INPUT_LENGTH} from "./constants";
+import type { RuleObject } from "antd/es/form/index.d.ts";
+
+import {USERNAME_INPUT_LENGTH, LOGIN_INPUT_LENGTH, PASSWORD_INPUT_LENGTH} from "./constants.ts";
 
 export const usernameRules = [
 {

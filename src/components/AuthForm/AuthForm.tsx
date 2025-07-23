@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import {
   Form as RouterForm,
   Link,
@@ -6,24 +7,23 @@ import {
   useSubmit,
   useActionData
 } from 'react-router';
-
 import {Form, Button, Input, Typography, Row, Col, message} from 'antd';
 
-import { usernameRules, loginRules, passwordRules, confirmPasswordRules, emailRules, phoneNumberRules } from '../../helpers/validationRules';
-import { useEffect } from 'react';
+import { usernameRules, loginRules, passwordRules, confirmPasswordRules, emailRules, phoneNumberRules } from '../../helpers/validationRules.ts';
+
 
 type FieldType = {
-  login?: string;
-  username?: string;
-  password?: string;
-  email?: string;
-  phoneNumber?: string;
-  confirmPassword?: string;
+  login: string;
+  username: string;
+  password: string;
+  email: string;
+  phoneNumber: string;
+  confirmPassword: string;
 };
 
 const {Title} = Typography
 
-function AuthForm() {
+const AuthForm: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm()
   const navigation = useNavigation();
@@ -72,27 +72,24 @@ function AuthForm() {
         <Form component={false} form={form} validateTrigger="onSubmit">
           <Col>
             {!isLogin &&<Form.Item<FieldType> name='username' label="Username" rules={usernameRules}>
-              <Input name='username'/>
+              <Input/>
             </Form.Item>}
             <Form.Item<FieldType> name='login' label="Login" rules={loginRules}>
-              <Input name='login'/>
+              <Input/>
             </Form.Item>
-            <Form.Item<FieldType> name='password' label="Password"
-              rules={passwordRules}>
-              <Input name='password' type="password"/>
+            <Form.Item<FieldType> name='password' label="Password" rules={passwordRules}>
+              <Input.Password/>
             </Form.Item>
-            <Form.Item<FieldType> name='confirmPassword' label="Confirm Password" dependencies={['password']}
-              rules={confirmPasswordRules}>
-              <Input name='confirmPassword' type="password"/>
+            <Form.Item<FieldType> name='confirmPassword' label="Confirm Password" dependencies={['password']} rules={confirmPasswordRules}>
+              <Input.Password/>
             </Form.Item>
             {!isLogin && 
             <>
               <Form.Item<FieldType> name='email' label="Email" rules={emailRules}>
-                <Input name='email' type="email"/>
+                <Input/>
               </Form.Item>
-              <Form.Item<FieldType> name='phoneNumber' label="Phone"
-                rules={phoneNumberRules}>
-                <Input name='phoneNumber' type="tel" addonBefore="+"/>
+              <Form.Item<FieldType> name='phoneNumber' label="Phone" rules={phoneNumberRules}>
+                <Input addonBefore="+"/>
               </Form.Item>
             </>}
             <div className='actions'>

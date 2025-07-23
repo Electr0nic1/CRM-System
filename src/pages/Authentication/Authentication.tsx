@@ -1,12 +1,13 @@
 import React from "react";
 import { Link, redirect } from "react-router";
 import type {ActionFunctionArgs} from "react-router";
-import AuthForm from "../../components/AuthForm/AuthForm";
 
-import {authenticateUser} from "../../api/api";
+import AuthForm from "../../components/AuthForm/AuthForm.tsx";
 import store from "../../store/index.ts";
-import {authActions} from "../../store/auth.ts";
-import type {UserRegistration} from "../../types/index.ts";
+import { authActions } from "../../store/auth.ts";
+import { signIn, signUp } from "../../api/api.ts";
+import { TokenManager } from "../../services/tokenManager.ts";
+import type { UserRegistration, UserLogin, AuthResponse } from "../../types/index.ts";
 
 const Authentication: React.FC = () => {
   return <AuthForm />
@@ -31,53 +32,49 @@ export async function action({ request }: ActionFunctionArgs) :Promise<Response 
   }
 
   const data = await request.formData();
-  const authData: Partial<UserRegistration> = {
-    email: data.get('email') as string ?? "",
-    username: data.get('username') as string ?? "",
-    login: data.get('login') as string ?? "",
-    password: data.get('password') as string ?? "",
+
+  let registrationData: UserRegistration = {
+    email: String(data.get('email') || ''),
+    username: String(data.get('username') || ''),
+    login: String(data.get('login') || ''),
+    password: String(data.get('password') || ''),
   };
 
   const phoneNumber = data.get('phoneNumber');
   if (typeof phoneNumber === 'string' && phoneNumber.trim() !== '') {
-    authData['phoneNumber'] = '+' + phoneNumber;
+    registrationData['phoneNumber'] = '+' + phoneNumber;
   }
 
-  const response = await authenticateUser(authData, mode);
+  let authData: UserLogin = {
+    login: String(data.get('login') || ''),
+    password: String(data.get('password') || ''),
+  };
 
-  if (response.status === 409) {
+  const response: AuthResponse = mode === 'signin' ? await signIn(authData) : await signUp(registrationData);
+
+
+  const statusMessages: Record<number, string> = {
+    409: 'User already exists. Please try logging in.',
+    400: 'Invalid input. Please try again.',
+    401: 'Invalid credentials. Please try again.',
+    500: 'An error occurred during authentication. Please try again later.',
+  };
+
+  const errorMessage = statusMessages[response.status];
+
+  if (errorMessage) {
     return {
       success: false,
-      message: 'User already exists. Please try logging in.'
+      message: errorMessage
     };
   }
 
-  if (response.status === 400) {
-    return {
-      success: false,
-      message: 'Invalid input. Please try again.'
-    };
-  }
 
-  if (response.status === 401) {
-    return {
-      success: false,
-      message: 'Invalid credentials. Please try again.'
-    };
-  }
+  if ('token' in response && response.token) {
 
-  if (response.status === 500) {
-    return {
-      success: false,
-      message: 'An error occurred during authentication. Please try again later.'
-    };
-  }
-
-  if ('token' in response) {
-    const token = response.token;
-
-    store.dispatch(authActions.setAccessToken({ accessToken: token.accessToken }));
-    localStorage.setItem('refreshToken', token.refreshToken);
+    TokenManager.setToken(response.token.accessToken);
+    store.dispatch(authActions.authorize());
+    localStorage.setItem('refreshToken', response.token.refreshToken);
   }
 
   if (response.status === 200 && mode === 'signin') {

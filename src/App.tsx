@@ -2,14 +2,15 @@ import React from "react";
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router";
 import { Provider } from "react-redux";
 
-import RootLayout from "./layout/RootLayout";
-import AppLayout from "./layout/AppLayout";
-import TodoListPage from "./pages/TodoListPage/TodoListPage";
-import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import ErrorPage from "./pages/Error/Error";
-import AuthenticationPage, {action as authAction} from "./pages/Authentication/Authentication";
-import { checkAuthLoader } from "./helpers/auth";
-import store from "./store";
+import RootLayout from "./layout/RootLayout.tsx";
+import AppLayout from "./layout/AppLayout.tsx";
+import TodoListPage from "./pages/TodoListPage/TodoListPage.tsx";
+import ProfilePage from "./pages/ProfilePage/ProfilePage.tsx";
+import ErrorPage from "./pages/Error/Error.tsx";
+import AuthenticationPage, {action as authAction} from "./pages/Authentication/Authentication.tsx";
+
+import { checkAuthLoader } from "./helpers/auth.ts";
+import store from "./store/index.ts";
 
 const App: React.FC = () => {
   const router = createBrowserRouter(

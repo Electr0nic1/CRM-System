@@ -31,6 +31,13 @@ export interface UserRegistration {
   phoneNumber?: string; 
 }
 
+export type AuthResponse = {
+  token?: Token;
+  status: number;
+}
+
+export type UserLogin = Pick<UserRegistration, 'login' | 'password'>
+
 export type Role = 'ADMIN' |'USER' | 'MODERATOR'
 
 export interface Token {

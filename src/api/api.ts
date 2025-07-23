@@ -1,9 +1,17 @@
 import { API_URL } from '../helpers/config.ts'
 import axios from 'axios'
 
-import type { Todo, TodoInfo, TaskCategory, UserRegistration, Token, Profile } from '../types/index.ts'
 import store from '../store/index.ts'
 import { authActions } from '../store/auth.ts'
+import { TokenManager } from '../services/tokenManager.ts'
+import type { Todo, TodoInfo, TaskCategory, UserRegistration, UserLogin, Token, Profile, AuthResponse } from '../types/index.ts'
+
+const forceLogout = () => {
+  localStorage.removeItem('refreshToken');
+  TokenManager.clearToken();
+  store.dispatch(authActions.unauthorize());
+  window.location.href = '/auth?mode=signin';
+}
 
 const api = axios.create({
   baseURL: API_URL,
@@ -12,7 +20,7 @@ const api = axios.create({
 
 api.interceptors.request.use(config => {
   const isProtected = !['/auth/signin', '/auth/signup', '/auth/refresh'].includes(config.url || '')
-  const token = store.getState().auth.accessToken
+  const token = TokenManager.getToken()
 
   if (isProtected && token) {
     config.headers.Authorization = `Bearer ${token}`
@@ -36,19 +44,14 @@ function processQueue(error: any, token: string | null = null) {
 }
 
 api.interceptors.response.use(
-  response => {
-    return response
-    },
+  response => response,
   async error => {
     const originalRequest = error.config;
 
     if (error.config?.url?.includes('/auth/refresh') && error.response?.status === 401) {
-      localStorage.clear();
-      store.dispatch(authActions.removeAccessToken());
-      window.location.href = '/auth?mode=signin';
+      forceLogout();
       return Promise.reject(error);
     }
-
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
@@ -68,31 +71,29 @@ api.interceptors.response.use(
 
       try {
         let refreshToken = localStorage.getItem('refreshToken');
+        
         if (!refreshToken) {
-          localStorage.clear();
-          store.dispatch(authActions.removeAccessToken());
-          window.location.href = '/auth?mode=signin';
+          forceLogout();  
           return Promise.reject(error);
         }
 
-        const data = await refresh(refreshToken as string);
+        const data = await refresh(refreshToken);
 
-        store.dispatch(authActions.setAccessToken({ accessToken: data.accessToken }));
+        TokenManager.setToken(data.accessToken);
+        store.dispatch(authActions.authorize());
         localStorage.setItem('refreshToken', data.refreshToken);
 
-        api.defaults.headers.common['Authorization'] = 'Bearer ' + data.accessToken;
+        api.defaults.headers.common['Authorization'] = 'Bearer ' + TokenManager.getToken();
 
-        processQueue(null, data.accessToken);
+        processQueue(null, TokenManager.getToken());
 
-        originalRequest.headers['Authorization'] = 'Bearer ' + data.accessToken;
+        originalRequest.headers['Authorization'] = 'Bearer ' + TokenManager.getToken();
         
         return api(originalRequest);
       } catch (err) {
         processQueue(err, null);
-
-        localStorage.clear();
-        store.dispatch(authActions.removeAccessToken());
-        window.location.href = '/auth?mode=signin';
+        forceLogout();
+        
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
@@ -151,40 +152,33 @@ export async function updateTask(task: Todo): Promise<Todo> {
   }
 }
 
-type AuthResponse = {
-  token: Token;
-  status: number;
-} | {
-  user: Profile;
-  status: number;
-} | {
-  message: string;
-  status: number;
+export async function signUp(registrationData: UserRegistration): Promise<{ status: number }> {
+  try {
+    const response = await api.post('/auth/signup', registrationData)
+    return {
+      status: response.status
+    }
+  } catch (error: any) {
+    return {
+      status: error.response?.status || 500
+    }
+  }
 }
 
-export async function authenticateUser(authData: Partial<UserRegistration>, mode: 'signin' | 'signup'): Promise<AuthResponse> {
+export async function signIn(authData: UserLogin): Promise<AuthResponse> {
   try {
-    const response = await api.post(`/auth/${mode}`, authData)
-
-    if (mode === 'signin') {
-      return {
-        token: {
-          accessToken: response.data.accessToken,
-          refreshToken: response.data.refreshToken,
-        },
-        status: response.status,
-      }
-    } else {
-      return {
-        user: response.data,
-        status: response.status,
+    const response = await api.post('/auth/signin', authData)
+    return {
+      status: response.status,
+      token: {
+        accessToken: response.data.accessToken,
+        refreshToken: response.data.refreshToken,
       }
     }
   } catch (error: any) {
-    const message = error.response?.data?.message || error.message || 'Authentication failed' 
-    const status = error.response?.status || 500
-
-    return { message, status }
+    return {
+      status: error.response?.status || 500
+    }
   }
 }
 
@@ -215,8 +209,6 @@ export async function logout(): Promise<void> {
   } catch (error) {
     throw error
   } finally {
-    localStorage.clear()
-    store.dispatch(authActions.removeAccessToken());
-    window.location.href = '/auth?mode=signin'
+    forceLogout();
   }
 }

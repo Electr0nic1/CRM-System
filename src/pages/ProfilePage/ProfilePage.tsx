@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Typography, Flex, message, Button } from 'antd'
 
-import type { Profile } from '../../types'
-import { getProfile, logout } from '../../api/api'
+import { getProfile, logout } from '../../api/api.ts'
+import type { Profile } from '../../types/index.ts'
 
 const { Title } = Typography
 
