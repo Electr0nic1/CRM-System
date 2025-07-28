@@ -1,4 +1,4 @@
-import type { RuleObject } from "antd/es/form/index.d.ts";
+import type { RuleObject, FormInstance } from "antd/es/form/index.d.ts";
 
 import {USERNAME_INPUT_LENGTH, LOGIN_INPUT_LENGTH, PASSWORD_INPUT_LENGTH} from "./constants.ts";
 
@@ -58,8 +58,8 @@ export const confirmPasswordRules = [
   required: true,
   message: 'Password confirmation is required',
 },
-({ getFieldValue } : any) => ({
-  validator(_: RuleObject, value: any) {
+({ getFieldValue } : Pick<FormInstance, "getFieldValue">) => ({
+  validator(_: RuleObject, value: string) {
     if (!value || getFieldValue('password') === value) {
       return Promise.resolve();
     }

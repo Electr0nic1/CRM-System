@@ -1,6 +1,6 @@
-import { API_URL } from '../helpers/config.ts'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
+import { API_URL } from '../helpers/config.ts'
 import store from '../store/index.ts'
 import { authActions } from '../store/auth.ts'
 import { TokenManager } from '../services/tokenManager.ts'
@@ -30,13 +30,13 @@ api.interceptors.request.use(config => {
 })
 
 let isRefreshing = false;
-let failedQueue: { resolve: (token: string) => void; reject: (err: any) => void }[] = [];
+let failedQueue: { resolve: (token: string) => void; reject: (err: AxiosError) => void }[] = [];
 
-function processQueue(error: any, token: string | null = null) {
+function processQueue(error: AxiosError | null, token: string | null = null) {
   failedQueue.forEach(prom => {
     if (token) {
       prom.resolve(token);
-    } else {
+    } else if (error) {
       prom.reject(error);
     }
   });
@@ -90,11 +90,13 @@ api.interceptors.response.use(
         originalRequest.headers['Authorization'] = 'Bearer ' + TokenManager.getToken();
         
         return api(originalRequest);
-      } catch (err) {
-        processQueue(err, null);
+      } catch (error) {
+        if (axios.isAxiosError(error) ) {
+          processQueue(error, null);
+        }
+
         forceLogout();
-        
-        return Promise.reject(err);
+        return Promise.reject(error);
       } finally {
         isRefreshing = false;
       }
@@ -158,9 +160,15 @@ export async function signUp(registrationData: UserRegistration): Promise<{ stat
     return {
       status: response.status
     }
-  } catch (error: any) {
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return {
+        status: error.response.status
+      }
+    }
+
     return {
-      status: error.response?.status || 500
+      status: 500
     }
   }
 }
@@ -175,9 +183,15 @@ export async function signIn(authData: UserLogin): Promise<AuthResponse> {
         refreshToken: response.data.refreshToken,
       }
     }
-  } catch (error: any) {
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return {
+        status: error.response.status
+      }
+    }
+
     return {
-      status: error.response?.status || 500
+      status: 500
     }
   }
 }
