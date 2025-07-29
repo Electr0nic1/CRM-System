@@ -18,6 +18,7 @@ export async function checkAuthLoader () {
 
       return null
   } catch (error) {
+      console.error(error)
       localStorage.removeItem('refreshToken');
       TokenManager.clearToken();
       store.dispatch(authActions.unauthorize());

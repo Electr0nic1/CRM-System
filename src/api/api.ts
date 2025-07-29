@@ -6,13 +6,6 @@ import { authActions } from '../store/auth.ts'
 import { TokenManager } from '../services/tokenManager.ts'
 import type { Todo, TodoInfo, TaskCategory, UserRegistration, UserLogin, Token, Profile, AuthResponse } from '../types/index.ts'
 
-const forceLogout = () => {
-  localStorage.removeItem('refreshToken');
-  TokenManager.clearToken();
-  store.dispatch(authActions.unauthorize());
-  window.location.href = '/auth?mode=signin';
-}
-
 const api = axios.create({
   baseURL: API_URL,
   timeout: 5000,
@@ -48,9 +41,12 @@ api.interceptors.response.use(
   async error => {
     const originalRequest = error.config;
 
-    if (error.config?.url?.includes('/auth/refresh') && error.response?.status === 401) {
-      forceLogout();
+    if (error.config?.url?.includes('/auth/signin') || error.config?.url?.includes('/auth/signup')) {
       return Promise.reject(error);
+    }
+
+    if (error.config?.url?.includes('/auth/refresh') && error.response?.status === 401) {
+      return Promise.reject(new AxiosError('Unauthorized'));
     }
 
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -70,11 +66,10 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        let refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = localStorage.getItem('refreshToken');
         
         if (!refreshToken) {
-          forceLogout();  
-          return Promise.reject(error);
+          return Promise.reject(new AxiosError('Unauthorized'));
         }
 
         const data = await refresh(refreshToken);
@@ -95,8 +90,7 @@ api.interceptors.response.use(
           processQueue(error, null);
         }
 
-        forceLogout();
-        return Promise.reject(error);
+        return Promise.reject(new AxiosError('Unauthorized'));
       } finally {
         isRefreshing = false;
       }
@@ -114,6 +108,7 @@ export async function getTasks(status: TaskCategory = 'all'): Promise<{ data: To
 
     return response.data
   } catch (error) {
+    console.error(error)
     throw error
   }
 }
@@ -127,6 +122,7 @@ export async function createTask(title: string): Promise<Todo> {
 
     return response.data
   } catch (error) {
+    console.error(error)
     throw error
   }
 }
@@ -137,6 +133,7 @@ export async function deleteTask(id: number): Promise<string> {
 
     return response.data
   } catch (error) {
+    console.error(error)
     throw error
   }
 }
@@ -150,6 +147,7 @@ export async function updateTask(task: Todo): Promise<Todo> {
 
     return response.data
   } catch (error) {
+    console.error(error)
     throw error
   }
 }
@@ -204,6 +202,7 @@ export async function refresh(refreshToken: string): Promise<Token> {
 
     return response.data
   } catch (error) {
+    console.error(error)
     throw error
   }
 }
@@ -213,6 +212,7 @@ export async function getProfile(): Promise<Profile> {
     const response = await api.get('/user/profile')
     return response.data
   } catch (error) {
+    console.error(error)
     throw error
   }
 }
@@ -221,8 +221,6 @@ export async function logout(): Promise<void> {
   try {
     await api.post('/user/logout')
   } catch (error) {
-    throw error
-  } finally {
-    forceLogout();
-  }
+    console.error(error)
+  } 
 }

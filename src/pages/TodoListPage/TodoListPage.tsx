@@ -24,6 +24,7 @@ const TodoListPage: React.FC = () => {
       setTasks(response.data)
       setFilter(response.info)
     } catch (error) {
+      console.error(error)
       messageApi.open({
         type: 'error',
         content: 'Failed to fetch tasks. Please try again.',

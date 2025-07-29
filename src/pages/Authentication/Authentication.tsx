@@ -33,7 +33,7 @@ export async function action({ request }: ActionFunctionArgs) :Promise<Response 
 
   const data = await request.formData();
 
-  let registrationData: UserRegistration = {
+  const registrationData: UserRegistration = {
     email: String(data.get('email') || ''),
     username: String(data.get('username') || ''),
     login: String(data.get('login') || ''),
@@ -45,11 +45,11 @@ export async function action({ request }: ActionFunctionArgs) :Promise<Response 
     registrationData['phoneNumber'] = '+' + phoneNumber;
   }
 
-  let authData: UserLogin = {
+  const authData: UserLogin = {
     login: String(data.get('login') || ''),
     password: String(data.get('password') || ''),
   };
-
+  
   const response: AuthResponse = mode === 'signin' ? await signIn(authData) : await signUp(registrationData);
 
 
@@ -71,7 +71,6 @@ export async function action({ request }: ActionFunctionArgs) :Promise<Response 
 
 
   if ('token' in response && response.token) {
-
     TokenManager.setToken(response.token.accessToken);
     store.dispatch(authActions.authorize());
     localStorage.setItem('refreshToken', response.token.refreshToken);

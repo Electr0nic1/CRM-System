@@ -28,6 +28,7 @@ const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
       await updateTasks()
       setIsEditing(false)
     } catch (error) {
+      console.error(error)
       messageApi.open({
         type: 'error',
         content: 'Failed to update task. Please try again.',
@@ -45,6 +46,7 @@ const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
       await updateTask({ ...task, isDone: !task.isDone })
       await updateTasks()
     } catch (error) {
+      console.error(error)
       messageApi.open({
         type: 'error',
         content: 'Failed to update task. Please try again.',
@@ -57,6 +59,7 @@ const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
       await deleteTask(id)
       await updateTasks()
     } catch (error) {
+      console.error(error)
       messageApi.open({
         type: 'error',
         content: 'Failed to delete task. Please try again.',

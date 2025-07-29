@@ -20,6 +20,7 @@ const TaskAdd: React.FC<TaskAddProps> = ( {updateTasks} ) =>  {
       await updateTasks()
       form.resetFields()
     } catch (error) {
+      console.error(error)
       messageApi.open({
         type: 'error',
         content: 'Failed to create task. Please try again.',
