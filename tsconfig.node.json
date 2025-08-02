@@ -21,6 +21,7 @@
       "@assets/*": ["assets/*"],
       "@api/*": ["api/*"],
       "@pages/*": ["pages/*"],
+      "@layout/*": ["layout/*"],
       "@helpers/*": ["helpers/*"],
       "@types/*": ["types/*"]
     },

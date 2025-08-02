@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { authActions } from "../store/auth.ts";
-import { TokenManager } from "../services/tokenManager.ts";
+import TokenManager from "../services/tokenManager.ts";
 
 export const useForceLogout = () => {
   const navigate = useNavigate();
@@ -11,6 +11,6 @@ export const useForceLogout = () => {
     localStorage.removeItem('refreshToken');
     TokenManager.clearToken();
     dispatch(authActions.unauthorize());
-    navigate('/auth?mode=signin');
+    navigate('/auth/signin');
   };
 };

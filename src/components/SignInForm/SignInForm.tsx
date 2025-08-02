@@ -2,36 +2,30 @@ import React, { useEffect } from 'react';
 import {
   Form as RouterForm,
   Link,
-  useSearchParams,
   useNavigation,
   useSubmit,
   useActionData
 } from 'react-router';
 import {Form, Button, Input, Typography, Row, Col, message} from 'antd';
 
-import { usernameRules, loginRules, passwordRules, confirmPasswordRules, emailRules, phoneNumberRules } from '../../helpers/validationRules.ts';
+import { loginRules, passwordRules, confirmPasswordRules } from '../../helpers/validationRules.ts';
 
 
 type FieldType = {
   login: string;
-  username: string;
   password: string;
-  email: string;
-  phoneNumber: string;
   confirmPassword: string;
 };
 
 const {Title} = Typography
 
-const AuthForm: React.FC = () => {
+const SignInForm: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage()
-  const [form] = Form.useForm()
+  const [form] = Form.useForm<FieldType>()
   const navigation = useNavigation();
   const submit = useSubmit();
   const actionData = useActionData();
 
-  const [searchParams] = useSearchParams();
-  const isLogin = searchParams.get('mode') === 'signin';
   const isSubmitting = navigation.state === 'submitting';
 
   useEffect(() => {
@@ -59,8 +53,7 @@ const AuthForm: React.FC = () => {
         if (value === undefined || value === null) continue;
         formData.append(key, value as string);
       }
-
-      submit(formData, { method: 'post', action: '/auth?mode=' + (isLogin ? 'signin' : 'signup') });
+      submit(formData, { method: 'post', action: '/auth/signin' });
     })
   } 
 
@@ -68,12 +61,9 @@ const AuthForm: React.FC = () => {
     <>
       <RouterForm method="post" className='form' onSubmit={handleSubmit}>
         {contextHolder}
-        <Title level={2}>{isLogin ? 'Login' : 'Registration'}</Title>
+        <Title level={2}>Login</Title>
         <Form component={false} form={form} validateTrigger="onSubmit">
           <Col>
-            {!isLogin &&<Form.Item<FieldType> name='username' label="Username" rules={usernameRules}>
-              <Input/>
-            </Form.Item>}
             <Form.Item<FieldType> name='login' label="Login" rules={loginRules}>
               <Input/>
             </Form.Item>
@@ -83,22 +73,11 @@ const AuthForm: React.FC = () => {
             <Form.Item<FieldType> name='confirmPassword' label="Confirm Password" dependencies={['password']} rules={confirmPasswordRules}>
               <Input.Password/>
             </Form.Item>
-            {!isLogin && 
-            <>
-              <Form.Item<FieldType> name='email' label="Email" rules={emailRules}>
-                <Input/>
-              </Form.Item>
-              <Form.Item<FieldType> name='phoneNumber' label="Phone" rules={phoneNumberRules}>
-                <Input addonBefore="+"/>
-              </Form.Item>
-            </>}
             <div className='actions'>
               <Row>
                 <Col span={12}>
                   <Button type='link' block>
-                    <Link to={`?mode=${isLogin ? 'signup' : 'signin'}`}>
-                      {isLogin ? 'Registration' : 'Login'}
-                    </Link>
+                    <Link to='/auth/signup'>Registration</Link>
                   </Button>
                 </Col>
                 <Col span={12}>
@@ -115,4 +94,4 @@ const AuthForm: React.FC = () => {
   );
 }
 
-export default AuthForm;
+export default SignInForm;

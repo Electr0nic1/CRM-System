@@ -4,9 +4,9 @@ import { message } from 'antd'
 import TaskAdd from '../../components/TaskAdd/TaskAdd.tsx'
 import TaskSwitch from '../../components/TaskSwitch/TaskSwitch.tsx'
 import TaskList from '../../components/TaskList/TaskList.tsx'
-import { getTasks } from '../../api/api.ts'
+import { getTasks } from '../../api/task.ts'
 import { TIMEOUT } from '../../helpers/constants.ts'
-import type { Todo, TodoInfo, TaskCategory } from '../../types/index.ts'
+import type { Todo, TodoInfo, TaskCategory } from '../../types/task.ts'
 
 const TodoListPage: React.FC = () => {
   const [category, setCategory] = useState<TaskCategory>('all')

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Col, Row, Input, message, Form } from 'antd'
-import { createTask } from '../../api/api.ts'
+import { createTask } from '../../api/task.ts'
 
 import { TASK_INPUT_LENGTH } from '../../helpers/constants.ts'
 

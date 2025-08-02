@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Typography, Flex, message, Button } from 'antd'
 
-import { getProfile, logout } from '../../api/api.ts'
-import type { Profile } from '../../types/index.ts'
+import { getProfile } from '../../api/profile.ts'
+import { logout } from '../../api/auth.ts'
+import type { Profile } from '../../types/profile.ts'
 import { useForceLogout } from '../../hooks/useForceLogout.ts'
 
 const { Title } = Typography

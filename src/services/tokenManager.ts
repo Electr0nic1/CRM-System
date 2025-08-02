@@ -1,15 +1,16 @@
-export const TokenManager = (() => {
-  let accessToken: string | null = null
+export default class TokenManager {
+  static #accessToken: string | null = null;
 
-  return {
-    setToken: (token: string) => {
-      accessToken = token
-    },
-    getToken: () => {
-      return accessToken
-    },
-    clearToken: () => {
-      accessToken = null
-    }
+  static setToken(accessToken: string) {
+    this.#accessToken = accessToken
   }
-})()
+
+  static getToken() {
+    return this.#accessToken
+  }
+
+  static clearToken() {
+    this.#accessToken = null
+  }
+  
+}

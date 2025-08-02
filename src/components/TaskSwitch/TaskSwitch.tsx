@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Col, Row } from 'antd'
 
 import { STATUS } from '../../helpers/status.ts'
-import type { TodoInfo, TaskCategory } from '../../types/index.ts'
+import type { TodoInfo, TaskCategory } from '../../types/task.ts'
 
 type TaskSwitchProps = {
   filter: TodoInfo

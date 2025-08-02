@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Checkbox, Button, Input, message, Form } from 'antd'
 
-import { updateTask, deleteTask } from '../../api/api.ts'
+import { updateTask, deleteTask } from '../../api/task.ts'
 import { TASK_INPUT_LENGTH } from '../../helpers/constants.ts'
-import type { Todo } from '../../types/index.ts'
+import type { Todo } from '../../types/task.ts'
 
 import saveImg from '@assets/save.png'
 import editImg from '@assets/edit.png'

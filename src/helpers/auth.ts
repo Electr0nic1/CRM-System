@@ -2,8 +2,8 @@ import { redirect } from "react-router";
 
 import store from "../store/index.ts";
 import { authActions } from "../store/auth.ts";
-import { refresh } from "../api/api.ts";
-import { TokenManager } from "../services/tokenManager.ts";
+import { refresh } from "../api/auth.ts";
+import TokenManager from "../services/tokenManager.ts";
 
 export async function checkAuthLoader () {
   const refreshToken = localStorage.getItem('refreshToken');
@@ -24,5 +24,5 @@ export async function checkAuthLoader () {
       store.dispatch(authActions.unauthorize());
   }}
 
-  return redirect('/auth?mode=signin')
+  return redirect('/auth/signin')
 }

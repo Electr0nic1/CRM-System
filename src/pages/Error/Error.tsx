@@ -11,7 +11,7 @@ const Error: React.FC = () => {
     <>
       <Title level={1}>Something went wrong</Title>
       <Title level={2}>{error?.status} - {error?.statusText}</Title>
-      <Button type='link' block><Link to="/auth?mode=signin">Log in</Link></Button>
+      <Button type='link' block><Link to="/auth/signin">Log in</Link></Button>
     </>
   )
 }
