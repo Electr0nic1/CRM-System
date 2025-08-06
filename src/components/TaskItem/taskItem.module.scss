@@ -26,22 +26,24 @@
     appearance: auto;
   }
 
-  .ant-checkbox-inner {
-    border-radius: 100%;
+  .checkbox {
+    span {    
+      border-radius: 100%;
+    }
   }
 
-  .ant-form-item {
+  .formItem {
     margin-bottom: 0;
   }
 }
 
-.task-edit {
+.taskEdit {
   display: flex;
   gap: 1rem;
   flex-direction: row;
   margin: 0 15px;
 }
 
-.edit-input {
+.editInput {
   text-align: left;
 }

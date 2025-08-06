@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Col, Row } from 'antd'
 
+import styles from './taskSwitch.module.scss'
 import { STATUS } from '../../helpers/status.ts'
 import type { TodoInfo, TaskCategory } from '../../types/task.ts'
 
@@ -12,13 +13,13 @@ type TaskSwitchProps = {
 
 const TaskSwitch: React.FC<TaskSwitchProps> = ({ filter, updateTasks, category }) => {
   return (
-    <nav className="tabs">
+    <nav className={styles.tabs}>
       <Row>
         <Col span={6} offset={3}>
           <Button
             color="primary"
             variant="link"
-            className={`tab-link ${category === STATUS.ALL ? 'active' : ''}`}
+            className={`${styles.tabLink} ${category === STATUS.ALL ? styles.active : null}`}
             onClick={() => updateTasks(STATUS.ALL)}
           >
             All({filter.all})
@@ -28,7 +29,7 @@ const TaskSwitch: React.FC<TaskSwitchProps> = ({ filter, updateTasks, category }
           <Button
             color="primary"
             variant="link"
-            className={`tab-link ${category === STATUS.INWORK ? 'active' : ''}`}
+            className={`${styles.tabLink} ${category === STATUS.INWORK ? styles.active : null}`}
             onClick={() => updateTasks(STATUS.INWORK)}
           >
             At work({filter.inWork})
@@ -38,7 +39,7 @@ const TaskSwitch: React.FC<TaskSwitchProps> = ({ filter, updateTasks, category }
           <Button
             color="primary"
             variant="link"
-            className={`tab-link ${category === STATUS.COMPLETED ? 'active' : ''}`}
+            className={`${styles.tabLink} ${category === STATUS.COMPLETED ? styles.active : null}`}
             onClick={() => updateTasks(STATUS.COMPLETED)}
           >
             Done({filter.completed})

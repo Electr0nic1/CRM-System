@@ -1,7 +1,8 @@
 import React from 'react'
 import { Button, Col, Row, Input, message, Form } from 'antd'
-import { createTask } from '../../api/task.ts'
 
+import styles from './taskAdd.module.scss'
+import { createTask } from '../../api/task.ts'
 import { TASK_INPUT_LENGTH } from '../../helpers/constants.ts'
 
 type TaskAddProps = {
@@ -29,7 +30,7 @@ const TaskAdd: React.FC<TaskAddProps> = ( {updateTasks} ) =>  {
   }
 
   return (
-    <Form className="new-task" form={form} onFinish={handleCreate}>
+    <Form className={styles.newTask} form={form} onFinish={handleCreate}>
       {contextHolder}
       <Row>
         <Col span={18}>

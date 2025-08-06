@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Checkbox, Button, Input, message, Form } from 'antd'
 
+import styles from './taskItem.module.scss'
 import { updateTask, deleteTask } from '../../api/task.ts'
 import { TASK_INPUT_LENGTH } from '../../helpers/constants.ts'
 import type { Todo } from '../../types/task.ts'
@@ -68,8 +69,8 @@ const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
   }
 
   return (
-    <Form className="task" form={form} initialValues={{ title: task.title }} onFinish={handleSave}>
-      <Checkbox onChange={handleCheckboxClick} checked={task.isDone} />
+    <Form className={styles.task} form={form} initialValues={{ title: task.title }} onFinish={handleSave}>
+      <Checkbox onChange={handleCheckboxClick} checked={task.isDone} className={styles.checkbox}/>
       {contextHolder}
       {isEditing ? (
         <>
@@ -89,16 +90,17 @@ const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
                 message: `Task title cannot exceed ${TASK_INPUT_LENGTH.MAX} characters`,
               },
             ]}
+            className={styles.formItem}
           >
             <Input
-              className="edit-input"
+              className={styles.editInput}
               count={{
                 show: true,
                 max: TASK_INPUT_LENGTH.MAX,
               }}
             />
           </Form.Item>
-          <span className="task-edit">
+          <span className={styles.taskEdit}>
             <Button
               color="green"
               variant="solid"

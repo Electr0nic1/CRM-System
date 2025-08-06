@@ -8,7 +8,9 @@ import {
 } from 'react-router';
 import {Form, Button, Input, Typography, Row, Col, message} from 'antd';
 
+import styles from './signInForm.module.scss'
 import { loginRules, passwordRules, confirmPasswordRules } from '../../helpers/validationRules.ts';
+
 
 
 type FieldType = {
@@ -59,7 +61,7 @@ const SignInForm: React.FC = () => {
 
   return (
     <>
-      <RouterForm method="post" className='form' onSubmit={handleSubmit}>
+      <RouterForm method="post" className={styles.form} onSubmit={handleSubmit}>
         {contextHolder}
         <Title level={2}>Login</Title>
         <Form component={false} form={form} validateTrigger="onSubmit">

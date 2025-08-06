@@ -9,11 +9,13 @@
   background-color: var(--color-background2);
   height: 100vh;
 
-  .sidebar-menu {
-    background-color: inherit;
-  }
-
   li {
     font-size: 1.2rem;
   }
 }
+
+.sidebarMenu {
+  background-color: inherit;
+}
+
+
