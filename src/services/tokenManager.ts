@@ -1,16 +1,18 @@
-export default class TokenManager {
-  static #accessToken: string | null = null;
+class TokenManager {
+ #accessToken: string | null = null;
 
-  static setToken(accessToken: string) {
+  setToken(accessToken: string) {
     this.#accessToken = accessToken
   }
 
-  static getToken() {
+  getToken() {
     return this.#accessToken
   }
 
-  static clearToken() {
+  clearToken() {
     this.#accessToken = null
   }
   
 }
+
+export default new TokenManager()
