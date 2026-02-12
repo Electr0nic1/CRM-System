@@ -1,8 +1,9 @@
 import React from 'react'
 import { Button, Col, Row, Input, message, Form } from 'antd'
-import { createTask } from '../../api/api.ts'
 
-import { INPUT_LENGTH } from '../../helpers/constants.ts'
+import styles from './taskAdd.module.scss'
+import { createTask } from '../../api/task.ts'
+import { TASK_INPUT_LENGTH } from '../../helpers/constants.ts'
 
 type TaskAddProps = {
   updateTasks: () => Promise<void>
@@ -20,6 +21,7 @@ const TaskAdd: React.FC<TaskAddProps> = ( {updateTasks} ) =>  {
       await updateTasks()
       form.resetFields()
     } catch (error) {
+      console.error(error)
       messageApi.open({
         type: 'error',
         content: 'Failed to create task. Please try again.',
@@ -28,7 +30,7 @@ const TaskAdd: React.FC<TaskAddProps> = ( {updateTasks} ) =>  {
   }
 
   return (
-    <Form className="new-task" form={form} onFinish={handleCreate}>
+    <Form className={styles.newTask} form={form} onFinish={handleCreate}>
       {contextHolder}
       <Row>
         <Col span={18}>
@@ -40,16 +42,16 @@ const TaskAdd: React.FC<TaskAddProps> = ( {updateTasks} ) =>  {
                 message: 'Task title is required',
               },
               {
-                min: INPUT_LENGTH.MIN,
-                message: `Task title must be at least ${INPUT_LENGTH.MIN} characters`,
+                min: TASK_INPUT_LENGTH.MIN,
+                message: `Task title must be at least ${TASK_INPUT_LENGTH.MIN} characters`,
               },
               {
-                max: INPUT_LENGTH.MAX,
-                message: `Task title cannot exceed ${INPUT_LENGTH.MAX} characters`,
+                max: TASK_INPUT_LENGTH.MAX,
+                message: `Task title cannot exceed ${TASK_INPUT_LENGTH.MAX} characters`,
               },
             ]}
           >
-            <Input placeholder="Task To Be Done..." count={{ show: true, max: INPUT_LENGTH.MAX }} />
+            <Input placeholder="Task To Be Done..." count={{ show: true, max: TASK_INPUT_LENGTH.MAX }} />
           </Form.Item>
         </Col>
         <Col span={4} offset={2}>

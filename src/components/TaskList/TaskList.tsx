@@ -1,7 +1,8 @@
 import React from 'react'
-import TaskItem from '../../components/TaskItem/TaskItem'
 import { List } from 'antd'
-import type { Todo } from '../../types'
+
+import TaskItem from '../../components/TaskItem/TaskItem.tsx'
+import type { Todo } from '../../types/task.ts'
 
 type TaskListProps = {
   tasks: Todo[]

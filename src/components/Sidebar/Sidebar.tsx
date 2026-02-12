@@ -1,14 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Typography, Menu } from 'antd'
+
+import styles from './sidebar.module.scss'
 
 const { Title } = Typography
 
 const Sidebar: React.FC = () => {
   return (
-    <div className="sidebar">
+    <div className={styles.sidebar}>
       <Title level={2}>Sidebar</Title>
-      <Menu mode="inline" className="sidebar-menu">
+      <Menu mode="inline" className={styles.sidebarMenu}>
         <Menu.Item key="todo">
           <Link to="/">Todo List Page</Link>
         </Menu.Item>

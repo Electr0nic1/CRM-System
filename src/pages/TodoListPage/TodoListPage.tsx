@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { message } from 'antd'
 
-import TaskAdd from '../../components/TaskAdd/TaskAdd'
-import TaskSwitch from '../../components/TaskSwitch/TaskSwitch'
-import TaskList from '../../components/TaskList/TaskList'
-
-import { getTasks } from '../../api/api.js'
-import { TIMEOUT } from '../../helpers/constants.js'
-import type { Todo, TodoInfo, TaskCategory } from '../../types/index.js'
+import TaskAdd from '../../components/TaskAdd/TaskAdd.tsx'
+import TaskSwitch from '../../components/TaskSwitch/TaskSwitch.tsx'
+import TaskList from '../../components/TaskList/TaskList.tsx'
+import { getTasks } from '../../api/task.ts'
+import { TIMEOUT } from '../../helpers/constants.ts'
+import type { Todo, TodoInfo, TaskCategory } from '../../types/task.ts'
 
 const TodoListPage: React.FC = () => {
   const [category, setCategory] = useState<TaskCategory>('all')
@@ -25,7 +24,7 @@ const TodoListPage: React.FC = () => {
       setTasks(response.data)
       setFilter(response.info)
     } catch (error) {
-      console.error('Error fetching data:', error)
+      console.error(error)
       messageApi.open({
         type: 'error',
         content: 'Failed to fetch tasks. Please try again.',

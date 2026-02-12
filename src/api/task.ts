@@ -1,11 +1,5 @@
-import { API_URL } from '../helpers/config.ts'
-import axios from 'axios'
-import type { Todo, TodoInfo, TaskCategory } from '../types/index.ts'
-
-const api = axios.create({
-  baseURL: API_URL,
-  timeout: 5000,
-})
+import { api } from './axiosInstance'
+import type { Todo, TodoInfo, TaskCategory } from '../types/task'
 
 export async function getTasks(status: TaskCategory = 'all'): Promise<{ data: Todo[]; info: TodoInfo }> {
   try {
@@ -15,6 +9,7 @@ export async function getTasks(status: TaskCategory = 'all'): Promise<{ data: To
 
     return response.data
   } catch (error) {
+    console.error(error)
     throw error
   }
 }
@@ -28,6 +23,7 @@ export async function createTask(title: string): Promise<Todo> {
 
     return response.data
   } catch (error) {
+    console.error(error)
     throw error
   }
 }
@@ -38,11 +34,12 @@ export async function deleteTask(id: number): Promise<string> {
 
     return response.data
   } catch (error) {
+    console.error(error)
     throw error
   }
 }
 
-export async function updateTask(task: { id: number; isDone: boolean; title: string }) : Promise<Todo> {
+export async function updateTask(task: Todo): Promise<Todo> {
   try {
     const response = await api.put(`/todos/${task.id}`, {
       isDone: task.isDone,
@@ -51,6 +48,7 @@ export async function updateTask(task: { id: number; isDone: boolean; title: str
 
     return response.data
   } catch (error) {
+    console.error(error)
     throw error
   }
 }

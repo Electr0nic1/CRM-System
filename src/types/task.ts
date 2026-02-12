@@ -3,7 +3,7 @@ export type TodoRequest = Partial<Pick<Todo, 'title' | 'isDone'>>
 export interface Todo {
   id: number
   title: string
-  created: string
+  created?: string
   isDone: boolean
 }
 

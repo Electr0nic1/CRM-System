@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Checkbox, Button, Input, message, Form } from 'antd'
 
-import { updateTask, deleteTask } from '../../api/api.ts'
-import { INPUT_LENGTH } from '../../helpers/constants.ts'
-import type { Todo } from '../../types'
+import styles from './taskItem.module.scss'
+import { updateTask, deleteTask } from '../../api/task.ts'
+import { TASK_INPUT_LENGTH } from '../../helpers/constants.ts'
+import type { Todo } from '../../types/task.ts'
 
 import saveImg from '@assets/save.png'
 import editImg from '@assets/edit.png'
@@ -28,6 +29,7 @@ const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
       await updateTasks()
       setIsEditing(false)
     } catch (error) {
+      console.error(error)
       messageApi.open({
         type: 'error',
         content: 'Failed to update task. Please try again.',
@@ -45,6 +47,7 @@ const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
       await updateTask({ ...task, isDone: !task.isDone })
       await updateTasks()
     } catch (error) {
+      console.error(error)
       messageApi.open({
         type: 'error',
         content: 'Failed to update task. Please try again.',
@@ -57,6 +60,7 @@ const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
       await deleteTask(id)
       await updateTasks()
     } catch (error) {
+      console.error(error)
       messageApi.open({
         type: 'error',
         content: 'Failed to delete task. Please try again.',
@@ -65,8 +69,8 @@ const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
   }
 
   return (
-    <Form className="task" form={form} initialValues={{ title: task.title }} onFinish={handleSave}>
-      <Checkbox onChange={handleCheckboxClick} checked={task.isDone} />
+    <Form className={styles.task} form={form} initialValues={{ title: task.title }} onFinish={handleSave}>
+      <Checkbox onChange={handleCheckboxClick} checked={task.isDone} className={styles.checkbox}/>
       {contextHolder}
       {isEditing ? (
         <>
@@ -78,24 +82,25 @@ const TaskItem: React.FC<TaskItemProps> =  ({ task, updateTasks }) => {
                 message: 'Task title is required',
               },
               {
-                min: INPUT_LENGTH.MIN,
-                message: `Task title must be at least ${INPUT_LENGTH.MIN} characters`,
+                min: TASK_INPUT_LENGTH.MIN,
+                message: `Task title must be at least ${TASK_INPUT_LENGTH.MIN} characters`,
               },
               {
-                max: INPUT_LENGTH.MAX,
-                message: `Task title cannot exceed ${INPUT_LENGTH.MAX} characters`,
+                max: TASK_INPUT_LENGTH.MAX,
+                message: `Task title cannot exceed ${TASK_INPUT_LENGTH.MAX} characters`,
               },
             ]}
+            className={styles.formItem}
           >
             <Input
-              className="edit-input"
+              className={styles.editInput}
               count={{
                 show: true,
-                max: INPUT_LENGTH.MAX,
+                max: TASK_INPUT_LENGTH.MAX,
               }}
             />
           </Form.Item>
-          <span className="task-edit">
+          <span className={styles.taskEdit}>
             <Button
               color="green"
               variant="solid"
